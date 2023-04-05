@@ -17,3 +17,29 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+//Owners
+Route::resource('owners', 'App\Http\Controllers\Owner\OwnerController');  
+
+//Authors
+Route::resource('authors', 'App\Http\Controllers\Author\AuthorController');  
+
+//Readers
+Route::resource('readers', 'App\Http\Controllers\Reader\ReaderController', ['only' => ['index','show']]);  
+
+//Writers
+Route::resource('writers', 'App\Http\Controllers\Writer\WriterController', ['except' => ['create','destroy']]);  
+
+//Notes
+Route::resource('notess', 'App\Http\Controllers\Notes\NotesController'); 
+
+//States
+Route::resource('states', 'App\Http\Controllers\States\StatesController', ['only' => ['index','show']]);  
+
+//Users
+Route::resource('users', 'App\Http\Controllers\User\UserController');  
+
+//Rol
+Route::resource('rol', 'App\Http\Controllers\Rol\RolController', ['only' => ['index','show']]);  
+
+

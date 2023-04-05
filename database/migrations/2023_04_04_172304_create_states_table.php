@@ -12,7 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('states', function (Blueprint $table) {
-            $table->id();
+            $table->increments('id');
+            $table->string('name_status')->default('Ingresado');
             $table->timestamps();
         });
     }

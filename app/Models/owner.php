@@ -7,5 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 
 class owner extends User
 {
-    use HasFactory;
+    
+    public function notes()
+    {
+        return $this->morphMany(Note::class, 'owner');// 1 a muchos
+    }
 }

@@ -18,17 +18,19 @@ class User extends Authenticatable
     const VERIFICADO = '1';
     const NO_VERIFICADO = '0';
 
-    protected $fillable = [
+    protected $fillable = [  //campos que se pueden asignar de manera masiva
         'name',
         'email',
         'password',
-        'rol',
-        'is_verificado',
+        'rol_id',
+       // 'is_verificado',
+
     ];
 
     protected $hidden = [
         'password',
         'verification_token',
+        'is_verificado',
     ];
 
     // Verificación de usuario

@@ -19,16 +19,16 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 //Owners
-Route::resource('owners', 'App\Http\Controllers\Owner\OwnerController');  
+Route::resource('owners', 'App\Http\Controllers\Owner\OwnerController', ['except' => ['create','edit']]);  
 
 //Authors
-Route::resource('authors', 'App\Http\Controllers\Author\AuthorController');  
+Route::resource('authors', 'App\Http\Controllers\Author\AuthorController', ['except' => ['create','edit']]); 
 
 //Readers
 Route::resource('readers', 'App\Http\Controllers\Reader\ReaderController', ['only' => ['index','show']]);  
 
 //Writers
-Route::resource('writers', 'App\Http\Controllers\Writer\WriterController', ['except' => ['create','destroy']]);  
+Route::resource('writers', 'App\Http\Controllers\Writer\WriterController', ['except' => ['create','destroy','store']]);  
 
 //Notes
 Route::resource('notess', 'App\Http\Controllers\Notes\NotesController'); 
@@ -37,7 +37,7 @@ Route::resource('notess', 'App\Http\Controllers\Notes\NotesController');
 Route::resource('states', 'App\Http\Controllers\States\StatesController', ['only' => ['index','show']]);  
 
 //Users
-Route::resource('users', 'App\Http\Controllers\User\UserController');  
+Route::resource('users', 'App\Http\Controllers\User\UserController' , ['except' => ['create','edit']]); 
 
 //Rol
 Route::resource('rol', 'App\Http\Controllers\Rol\RolController', ['only' => ['index','show']]);  

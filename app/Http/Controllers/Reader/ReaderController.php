@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Reader;
 
 use App\Http\Controllers\Controller;
+use App\Models\Notes;
 use Illuminate\Http\Request;
 
 class ReaderController extends Controller
@@ -12,54 +13,15 @@ class ReaderController extends Controller
      */
     public function index()
     {
-        //
+        $notas = Notes::all();
+        return response()->json(['Notas' => $notas], 200);
     }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $title)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+    $nota = Notes::where('title', $title)->firstOrFail();
+    return response()->json(['Nota' => $nota], 200);
     }
 }

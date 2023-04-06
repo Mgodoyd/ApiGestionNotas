@@ -11,12 +11,13 @@ class Notes extends Model
     const Note_Ingresado= 'Ingresado';
     const Note_En_Proceso= 'Proceso';
     const Note_Finalizado= 'Finalizado';
-
+    
+    
      protected $fillable = [
-        'id',
         'title',
-        'description',
-        'state',
+        'content',
+        'state_id',
+        'user_id',
      ];
 
 

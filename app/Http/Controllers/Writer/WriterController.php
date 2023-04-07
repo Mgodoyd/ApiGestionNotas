@@ -2,16 +2,14 @@
 
 namespace App\Http\Controllers\Writer;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\ApiController;
 use App\Models\Notes;
 use Illuminate\Http\Request;
 
-class WriterController extends Controller
+class WriterController extends ApiController
 {
 
-    private function errorResponse($message, $code) {
-        return response()->json(['error' => $message, 'code' => $code], $code);
-    }
+  
     
     /**
      * Display a listing of the resource.
@@ -21,7 +19,7 @@ class WriterController extends Controller
    // $user = auth()->user();         //tengo que modificarlo asi
     
    $notas = Notes::all();
-   return response()->json(['Notas' => $notas], 200);
+   return $this->showAll($notas);
     
 }
     /**
@@ -31,7 +29,7 @@ class WriterController extends Controller
     
     {
             $nota = Notes::where('title', $title)->firstOrFail();
-            return response()->json(['Nota' => $nota], 200);
+            return $this->showOne($nota, 200);
    }
     
 
@@ -62,7 +60,7 @@ class WriterController extends Controller
            
            if ($nota->isDirty()) {
                 $nota->save();
-                return response()->json(['Nota' => $nota], 200);
+                return $this->showOne($nota, 200);
             } else {
                 return $this->errorResponse('Se debe especificar al menos un valor diferente para actualizar', 422);
             }

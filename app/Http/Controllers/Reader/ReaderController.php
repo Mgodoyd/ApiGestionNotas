@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Reader;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\ApiController;
 use App\Models\Notes;
 use Illuminate\Http\Request;
 
-class ReaderController extends Controller
+class ReaderController extends ApiController
 {
     /**
      * Display a listing of the resource.
@@ -14,7 +14,7 @@ class ReaderController extends Controller
     public function index()
     {
         $notas = Notes::all();
-        return response()->json(['Notas' => $notas], 200);
+        return $this->showAll($notas);
     }
     /**
      * Display the specified resource.
@@ -22,6 +22,6 @@ class ReaderController extends Controller
     public function show(string $title)
     {
     $nota = Notes::where('title', $title)->firstOrFail();
-    return response()->json(['Nota' => $nota], 200);
+    return $this->showOne($nota, 200);
     }
 }

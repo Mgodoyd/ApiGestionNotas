@@ -16,7 +16,7 @@ class Notes extends Model
      protected $fillable = [
         'title',
         'content',
-        'state_id',
+        'states_id',
         'user_id',
      ];
 
@@ -35,10 +35,25 @@ class Notes extends Model
         return $this->belongsTo(User::class); // "muchos a uno" 
     }
 
-    public function state()
+    /*public function state()
     {
         return $this->belongsTo(States::class, 'state_id'); // "muchos a uno"
+    }*/
+    /*public function state()
+    {
+        return $this->belongsTo(States::class, 'state_id');
+    }*/
+  
+    public function states()
+    {
+        return $this->belongsTo(States::class, 'states_id');
     }
+
+
+  
+
+
+    
     
 
 }

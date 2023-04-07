@@ -2,20 +2,24 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\ApiController;
+use App\Models\Notes;
 use App\Models\Rol;
 use App\Models\User;
 use Illuminate\Http\Request;
 
-class UserController extends Controller
+class UserController extends ApiController
 {
-    /**
-     * Display a listing of the resource.
-     */
+    
+   // ...
+    
+   
+
+
     public function index()
     {
         $usuarios = User::all();
-        return response()->json(['Usuarios' => $usuarios], 200);
+        return $this->showAll($usuarios);
     }
 
     /**
@@ -34,13 +38,13 @@ class UserController extends Controller
       //  $roles = Rol::allRoles();
     
       //  $validated = 
-      /*     $request -> validate([
+          $request -> validate([
            'name' => 'required',
            'email' => 'required|email|unique:users',
-            'password' => 'min:8|confirmed',
+            'password' => 'min:8',
            // 'role' => 'required|in:' . $roles->implode('id', ','),
         ]);
-  */
+  
         $campos = $request->all();
         $campos['password'] = bcrypt($request->password);
         $campos['verified'] = User::NO_VERIFICADO;
@@ -48,17 +52,16 @@ class UserController extends Controller
        /// $campos['rol_id'] = $validated['role'];*
     
         $usuario = User::create($campos);
-        return response()->json(['Usuario' => $usuario], 201);
+        return $this->showOne($usuario, 201);
     }
     
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(User $user)
     {
-        $usuario = User::findOrFail($id);
-        return response()->json(['Usuario' => $usuario], 200);
+        return $this->showOne($user, 200);
     }
 
     /**
@@ -72,9 +75,8 @@ class UserController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, User $user)
     { 
-        $user = User::findOrFail($id); //busca el usuario por el id
       
        $validatedData = $request->validate([ //valida los campos
             'email' => 'email|unique:users,email,' . $user->id,
@@ -100,28 +102,29 @@ class UserController extends Controller
 
         if ($request->has('rol_id')) { //si el request tiene el campo role
            if(!$user->isVerificado()){ //si el usuario no esta verificado
-             return response()->json(['error' => 'Unicamente los usuarios verificados pueden cambiar su rol', 'code' => 409], 409);
+             return $this->errorResponse('Unicamente los usuarios verificados pueden cambiar su rol', 409);
            }
            $user->rol_id = $request->rol_id; //se actualiza el rol
         }
         
         if ($user->isDirty()) {
-            var_dump($user->isDirty());
             $user->save();
         } else {
             return $this->errorResponse('Se debe especificar al menos un valor diferente para actualizar', 422);
         }
        
-        return response()->json(['Usuario' => $user], 200);
+        return $this->showOne($user, 200);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(User $user)
     {
-        $usuario = User::findOrFail($id);
-        $usuario->delete();
-        return response()->json(['Usuario eliminido' => $usuario], 200);
+    
+        $user->delete();
+    
+        return $this->showOne($user, 200);
     }
+    
 }

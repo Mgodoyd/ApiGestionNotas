@@ -31,7 +31,26 @@ class User extends Authenticatable
         'password',
         'verification_token',
         'is_verificado',
+        'pivot'
     ];
+
+    //mutador para el campo name para que siempre se guarde en minusculas
+    public function setNameAttribute($valor)
+    {
+        $this->attributes['name'] = strtolower($valor);
+    }
+
+    //accessor para el campo name para que siempre se muestre en mayusculas
+    public function getNameAttribute($valor)
+    {
+        return ucwords($valor);
+    }
+
+    //accesor para el campo email para que siempre se guarde en minusculas
+    public function setEmailAttribute($valor)
+    {
+        $this->attributes['email'] = strtolower($valor);
+    }
 
     // Verificación de usuario
     public function getRoles()
@@ -98,4 +117,10 @@ class User extends Authenticatable
 {
     return $this->belongsTo(Rol::class, 'rol_id'); // "muchos a uno"
 }
+
+public function roles()
+{
+    return $this->belongsToMany(Rol::class, 'rol_user');
+}
+
 }

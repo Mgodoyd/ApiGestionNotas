@@ -2,16 +2,16 @@
 
 namespace App\Http\Controllers\Author;
 
-use App\Http\Controllers\Controller;
+use App\Http\Controllers\ApiController;
 use App\Models\Notes;
 use Illuminate\Http\Request;
 
-class AuthorController extends Controller
+class AuthorController extends ApiController
 {
 
-    private function errorResponse($message, $code) {
+  /*  private function errorResponse($message, $code) {
         return response()->json(['error' => $message, 'code' => $code], $code);
-    }
+    }*/
     
     /**
      * Display a listing of the resource.
@@ -20,7 +20,7 @@ class AuthorController extends Controller
     {
        
    $notas = Notes::all();
-   return response()->json(['Notas' => $notas], 200);
+   return $this->showAll($notas);
     }
 
   
@@ -30,21 +30,21 @@ class AuthorController extends Controller
      */
     public function store(Request $request)
     {
-       /*$request->validate([
+       $request->validate([
             'title' => 'required|unique:notes,title|max:255',
             'content' => 'required'
-        ]);*/
+        ]);
 
         $campos = $request->all();
 
-        $notaExistente = Notes::where('title', $request->input('title'))->exists();
+       /* $notaExistente = Notes::where('title', $request->input('title'))->exists();
     
         if ($notaExistente) {
-            return response()->json(['error' => 'Ya existe una nota con el mismo título'], 400);
+            return $this->errorResponse('Ya existe una nota con el mismo título', 400);
         }
-    
-        $usuario = Notes::create($campos);
-        return response()->json(['Nota Creada' => $usuario], 201);
+    */
+        $nota = Notes::create($campos);
+        return $this->showOne($nota, 201);
     }
 
     /**
@@ -53,7 +53,7 @@ class AuthorController extends Controller
     public function show(string $title)
     {
         $nota = Notes::where('title', $title)->firstOrFail();
-        return response()->json(['Nota' => $nota], 200);
+        return $this->showOne($nota, 200);
     }
 
     /**
@@ -85,7 +85,7 @@ class AuthorController extends Controller
            
            if ($nota->isDirty()) {
                 $nota->save();
-                return response()->json(['Nota Actualizada' => $nota], 200);
+                return $this->showOne($nota, 200); 
             } else {
                 return $this->errorResponse('Se debe especificar al menos un valor diferente para actualizar', 422);
             }

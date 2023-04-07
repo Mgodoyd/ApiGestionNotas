@@ -2,64 +2,30 @@
 
 namespace App\Http\Controllers\Rol;
 
+use App\Http\Controllers\Apicontroller;
 use App\Http\Controllers\Controller;
+use App\Models\Rol;
 use Illuminate\Http\Request;
 
-class RolController extends Controller
+class RolController extends Apicontroller
 {
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
-        //
+        $rol = Rol::all();
+        return $this->showAll($rol);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+    
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Rol $rol)
     {
-        //
+        return $this->showOne($rol, 200);
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
+   
 }

@@ -17,11 +17,11 @@ return new class extends Migration
             $table->string('title');
             $table->string('content',1000);
             $table->integer('user_id')->unsigned();
-            $table->integer('state_id')->unsigned();
+            $table->integer('states_id')->unsigned();
             $table->timestamps();
 
             $table->foreign('user_id')->references('id')->on('users');
-           $table->foreign('state_id')->references('id')->on('states');
+           $table->foreign('states_id')->references('id')->on('states');
         });
     }
 

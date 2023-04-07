@@ -31,7 +31,8 @@ Route::resource('readers', 'App\Http\Controllers\Reader\ReaderController', ['onl
 Route::resource('writers', 'App\Http\Controllers\Writer\WriterController', ['except' => ['create','destroy','store']]);  
 
 //Notes
-Route::resource('notess', 'App\Http\Controllers\Notes\NotesController'); 
+Route::resource('notes', 'App\Http\Controllers\Notes\NotesController', ['except' => ['create','edit']]); 
+Route::resource('notes.states', 'App\Http\Controllers\Notes\NotesStatesController', ['only' => ['index']]);
 
 //States
 Route::resource('states', 'App\Http\Controllers\States\StatesController', ['only' => ['index','show']]);  
@@ -40,6 +41,7 @@ Route::resource('states', 'App\Http\Controllers\States\StatesController', ['only
 Route::resource('users', 'App\Http\Controllers\User\UserController' , ['except' => ['create','edit']]); 
 
 //Rol
-Route::resource('rol', 'App\Http\Controllers\Rol\RolController', ['only' => ['index','show']]);  
+Route::resource('rols', 'App\Http\Controllers\Rol\RolController', ['only' => ['index','show']]);  
+Route::resource('rols.users', 'App\Http\Controllers\Rol\RolUserController', ['only' => ['index']]);
 
 

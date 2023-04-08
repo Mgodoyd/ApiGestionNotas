@@ -24,6 +24,13 @@ class DatabaseSeeder extends Seeder
         States::truncate();
         Notes::truncate();
 
+
+       /* User::flushEventListeners();  // Elimina los eventos de los modelos
+        Rol::flushEventListeners(); // Elimina los eventos de los modelos
+        States::flushEventListeners();
+        Notes::flushEventListeners();*/
+
+
         $cantidadRoles = 4;
         Rol::factory($cantidadRoles)->create();
 

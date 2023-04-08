@@ -11,6 +11,10 @@ use Illuminate\Http\Request;
 
 class NotesStatesController extends Apicontroller
 {
+    public function __construct()
+    {
+        $this->middleware('client.credentials')->only(['index']);
+    }
 
     public function index($id)
     {

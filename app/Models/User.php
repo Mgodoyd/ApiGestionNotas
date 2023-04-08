@@ -10,6 +10,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
 use Laravel\Sanctum\HasApiTokens;
+use App\Transformers\UserTransformer;
 
 class User extends Authenticatable
 {
@@ -18,18 +19,21 @@ class User extends Authenticatable
     const VERIFICADO = '1';
     const NO_VERIFICADO = '0';
 
+    public $transformer = UserTransformer::class;
     protected $fillable = [  //campos que se pueden asignar de manera masiva
         'name',
         'email',
         'password',
         'rol_id',
        // 'is_verificado',
+       
+       'verification_token',
 
     ];
 
     protected $hidden = [
         'password',
-        'verification_token',
+      //  'verification_token',
         'is_verificado',
         'pivot'
     ];

@@ -10,6 +10,12 @@ use Illuminate\Http\Request;
 
 class RolUserController extends Apicontroller
 {
+    public function __construct()
+    {
+        $this->middleware('client.credentials')->only(['index']);
+    }
+
+
     public function index($id)
     {
         $rol = Rol::find($id);

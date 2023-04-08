@@ -5,9 +5,21 @@ namespace App\Http\Controllers\Notes;
 use App\Http\Controllers\Apicontroller;
 use App\Models\Notes;
 use Illuminate\Http\Request;
+use App\Transformers\NotesTransformer;
+use Laravel\Passport\Http\Middleware\CheckClientCredentials;
+
 
 class NotesController extends Apicontroller
 {
+    public function __construct()
+    {
+        $this->middleware('client.credentials')->only(['index', 'show']);
+        $this->middleware('auth:api')->except(['index', 'show']);
+        $this->middleware('transform.input:' . NotesTransformer::class)->only(['store', 'update']);
+        $this->middleware('scope:manage-notes') //sirve para que solo los usuarios con el scope de manage-notes puedan acceder a las rutas
+            ->only(['store', 'update', 'destroy']);
+        $this->middleware('can:view,notes')->only('show'); //sirve para que solo los usuarios con el scope de manage-notes puedan acceder a las rutas
+    }
     /**
      * Display a listing of the resource.
      */

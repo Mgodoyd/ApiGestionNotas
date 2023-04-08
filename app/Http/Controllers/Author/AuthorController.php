@@ -19,8 +19,7 @@ class AuthorController extends ApiController
     public function index()
     {
        
-   $notas = Notes::all();
-   return $this->showAll($notas);
+   
     }
 
   
@@ -28,7 +27,7 @@ class AuthorController extends ApiController
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    /*public function store(Request $request)
     {
        $request->validate([
             'title' => 'required|unique:notes,title|max:255',
@@ -43,14 +42,14 @@ class AuthorController extends ApiController
             return $this->errorResponse('Ya existe una nota con el mismo título', 400);
         }
     */
-        $nota = Notes::create($campos);
+      /*  $nota = Notes::create($campos);
         return $this->showOne($nota, 201);
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $title)
+/*    public function show(string $title)
     {
         $nota = Notes::where('title', $title)->firstOrFail();
         return $this->showOne($nota, 200);
@@ -59,7 +58,7 @@ class AuthorController extends ApiController
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+   /* public function update(Request $request, string $id)
     {
         $nota = Notes::find($id);
 
@@ -95,10 +94,10 @@ class AuthorController extends ApiController
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+   /* public function destroy(string $id)
     {
          $nota = Notes::findOrFail($id);
         $nota->delete();
         return response()->json(['Nota eliminida' => $nota], 200);
-    }
+    }*/
 }

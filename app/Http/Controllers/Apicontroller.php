@@ -8,4 +8,9 @@ use Illuminate\Http\Request;
 class Apicontroller extends Controller
 {
     use ApiResponse;
+
+    public function __construct()
+    {
+        $this->middleware('auth:api');
+    }
 }

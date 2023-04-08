@@ -2,8 +2,12 @@
 
 namespace App\Traits;
 
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\JsonResponse;
+use Request;
+use \Illuminate\Support\Facades\Cache;
+
 trait ApiResponse
 {
     public function successResponse($data, $code)
@@ -16,11 +20,66 @@ trait ApiResponse
     }
 
     protected function showAll($collection, $code = 200){
-        return $this->successResponse(['data' => $collection], $code);
+
+         if($collection->isEmpty()){
+            return $this->successResponse(['data' => $collection],$code);
+         }
+
+        $transformer = $collection->first()->transformer;
+        $collection = $this->filterData($collection, $transformer);
+        $collection = $this->sortData($collection, $transformer);
+        $collection = $this->transformData($collection, $transformer);
+        $collection = $this->cacheResponse($collection);
+        return $this->successResponse($collection, $code);
     }
 
     protected function showOne(Model $instance, $code = 200){
-        return $this->successResponse(['data' => $instance], $code);
+           
+        $transformer = $instance->transformer;
+        $instance = $this->transformData($instance,$transformer);
+
+        return $this->successResponse($instance, $code);
+    }
+   
+    protected function filterData(Collection $collection, $transformer){
+       
+       foreach(request()->query() as $query => $value){
+            $attribute = $transformer::originalAttribute($query);
+
+            if(isset($attribute, $value)){
+                $collection = $collection->where($attribute, $value);}
+           
+       }
+       
+         return $collection;
+    }
+    
+
+   protected function sortData(Collection $collection, $transformer ){   //para ordenar por campo elegido
+        if(request()->has('sort_by')){
+            $sort = $transformer::originalAttribute(request()->sort_by);
+            $collection = $collection->sortBy->{$sort};
+        }
+        return $collection;
+   }
+
+
+   /* protected transformData($data , $transformer){
+        $transformation = fractal($data, new $transformer);
+        return $transformation->toArray();
+    }*/
+
+    protected function transformData($data, $transformer){
+        $transformation = fractal($data, new $transformer);
+        return $transformation->toArray();
+    }
+
+    protected function cacheResponse($data){
+        $url = request()->url();
+
+        return Cache::remember($url,30/60,function() use($data){
+            return $data;
+        });
     }
 
 }

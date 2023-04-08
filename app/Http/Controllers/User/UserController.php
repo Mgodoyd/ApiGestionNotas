@@ -7,10 +7,24 @@ use App\Models\Notes;
 use App\Models\Rol;
 use App\Models\User;
 use Illuminate\Http\Request;
+use App\Transformers\UserTransformer;
+use Symfony\Component\HttpFoundation\JsonResponse;
 
 class UserController extends ApiController
 {
+
+    public function __construct()
+    {
+        $this->middleware('client.credentials')->only(['index', 'show']);
+        $this->middleware('auth:api')->except(['index', 'show','verify']);
+        $this->middleware('scope:manage-account')->except(['index', 'show']);
+       // $this->middleware('transform.input' . UserTransformer::class)->only(['store', 'update']);
+       /*$this->middleware('can:view,notes')->only('show');
+       $this->middleware('can:update,notes')->only('update');
+       $this->middleware('can:delete,notes')->only('destroy');*/
+    } 
     
+
    // ...
     
    
@@ -61,6 +75,7 @@ class UserController extends ApiController
      */
     public function show(User $user)
     {
+        
         return $this->showOne($user, 200);
     }
 
@@ -78,9 +93,9 @@ class UserController extends ApiController
     public function update(Request $request, User $user)
     { 
       
-       $validatedData = $request->validate([ //valida los campos
-            'email' => 'email|unique:users,email,' . $user->id,
-            'rol_id' => 'in:' . Rol::allRoles()->implode('id', ','),
+       /*$validatedData = $request->validate([ //valida los campos
+            'email' => 'email|unique:users,' . $user->id, //
+          //  'rol_id' => 'in:' . Rol::allRoles()->implode('id', ','),
         ]);
 
         $user->fill($validatedData);
@@ -94,6 +109,7 @@ class UserController extends ApiController
             $user->is_verificado = User::NO_VERIFICADO;  //se actualiza el estado de verificacion
             $user->verification_token = User::generateVerificationToken();  //se genera un nuevo token de verificacion
             $user->email = $request->email; //se actualiza el email
+            $user->save(); //se guarda el usuario
         } 
 
         if($request->has('password')){    //si el request tiene el campo password
@@ -113,6 +129,13 @@ class UserController extends ApiController
             return $this->errorResponse('Se debe especificar al menos un valor diferente para actualizar', 422);
         }
        
+        return $this->showOne($user, 200);*/
+        $user->fill($request->all());
+        //colocar la password encriptada
+        if (!$user->isDirty()) {
+            return $this->errorResponse('Se debe especificar al menos un valor diferente para actualizar', 422);
+        }
+        $user->save();
         return $this->showOne($user, 200);
     }
 
@@ -126,5 +149,17 @@ class UserController extends ApiController
     
         return $this->showOne($user, 200);
     }
+
+    public function verify($token)
+    {
+        $user = User::where('verification_token', $token)->firstOrFail();
+        $user->is_verificado = User::VERIFICADO;
+        $user->verification_token = null;
+        $user->save();
+    
+        return new JsonResponse('El usuario ha sido verificado', 200);
+    }
+    
+
     
 }

@@ -18,19 +18,19 @@ class WriterController extends ApiController
     {// Obtener el usuario autenticado
    // $user = auth()->user();         //tengo que modificarlo asi
     
-   $notas = Notes::all();
-   return $this->showAll($notas);
+  /* $notas = Notes::all();
+   return $this->showAll($notas);*/
     
 }
     /**
      * Display the specified resource.
      */
-    public function show(string $title)
+  /*  public function show(string $title)
     
     {
             $nota = Notes::where('title', $title)->firstOrFail();
             return $this->showOne($nota, 200);
-   }
+   }*/
     
 
  
@@ -38,7 +38,7 @@ class WriterController extends ApiController
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+   /* public function update(Request $request, string $id)
         {
             $nota = Notes::find($id);
 
@@ -65,6 +65,6 @@ class WriterController extends ApiController
                 return $this->errorResponse('Se debe especificar al menos un valor diferente para actualizar', 422);
             }
         
-        }
+        }*/
 
 }

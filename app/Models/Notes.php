@@ -4,10 +4,13 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Transformers\NotesTransformer;
 
 class Notes extends Model
 {
     use HasFactory;
+
+    public $transformer = NotesTransformer::class;
     const Note_Ingresado= 'Ingresado';
     const Note_En_Proceso= 'Proceso';
     const Note_Finalizado= 'Finalizado';
@@ -16,11 +19,14 @@ class Notes extends Model
      protected $fillable = [
         'title',
         'content',
-        'states_id',
         'user_id',
+        'states_id',
      ];
 
+     protected $hidden = [
+      
 
+    ];
      
     public static function getAvailableStates()
     {

@@ -9,6 +9,12 @@ use Illuminate\Http\Request;
 
 class RolController extends Apicontroller
 {
+    public function __construct()
+    {
+        $this->middleware('client.credentials')->only(['index', 'show']);
+        $this->middleware('scope:manage-rol-state')->except(['index']);
+
+    }
     /**
      * Display a listing of the resource.
      */

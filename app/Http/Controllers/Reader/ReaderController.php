@@ -13,15 +13,14 @@ class ReaderController extends ApiController
      */
     public function index()
     {
-        $notas = Notes::all();
-        return $this->showAll($notas);
+      
     }
     /**
      * Display the specified resource.
      */
-    public function show(string $title)
+   /* public function show(string $title)
     {
     $nota = Notes::where('title', $title)->firstOrFail();
     return $this->showOne($nota, 200);
-    }
+    }*/
 }

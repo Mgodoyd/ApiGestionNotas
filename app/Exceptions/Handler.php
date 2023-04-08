@@ -65,6 +65,10 @@ class Handler extends ExceptionHandler
                 return $this->errorResponse('No se puede eliminar por que el recurso esta relacionado con alguna nota', 409);
             }
         }
+
+        if($exception instanceof TokenMismatchException){
+            return redirect()->back()->withInput($request->input());
+        }
         if(config('app.debug')){   //si estamos en modo debug, se muestra el error
             return parent::render($request, $exception);
         }
@@ -94,14 +98,27 @@ class Handler extends ExceptionHandler
     }*/
 
     protected function unauthenticated($request, AuthenticationException $exception){
+        if($this->isFronted($request)){
+            return redirect()->guest('login');
+        }
+
         return $this->errorResponse('No autenticado', 401);
     }
     protected function convertValidationExceptionToResponse( $e, $request)
     {
         $errors = $e->validator->errors()->getMessages();
-       
+        if($this->isFronted($request)){
+              return $request->ajax() ? response()->json($errors,422) : redirect()
+                   ->back()
+                   ->withInput($request->input())
+                   ->withErrors($errors);
+                }
             return $this->errorResponse($errors, 422);
        
         
+    }
+
+    private function isFronted($request){
+        return $request->acceptsHtml() && collect($request->route()->middleware())->contains('web');
     }
 }

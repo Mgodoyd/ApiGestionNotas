@@ -19,18 +19,19 @@ class NotesPolicy
     /**
      * Determine whether the user can view the model.
      */
-    public function view(User $user, Notes $notes): bool
+    public function view(User $user, Notes $notes): bool  // $user es el usuario autenticado, $notes es la nota que se está intentando ver
     {
          // Si el usuario es owner o autor, puede ver la nota
-    if ($user->role == 'owner' || $user->role == 'autor') {
+    if ($user->rol_id == 1 || $user->rol_id == 2) {
+        
         return true;
     }
      // Si el usuario es escritor, solo puede ver y actualizar sus propias notas
-     elseif ($user->role == 'escritor') {
+     elseif ($user->rol_id == 2) {
         return $user->id === $notes->user_id;
     }
     // Si el usuario es lector, solo puede ver notas
-    elseif ($user->role == 'lector') {
+    elseif ($user->rol_id == 4) {
         return true;
     }
     // Si el usuario no tiene un rol válido, no tiene acceso
@@ -52,22 +53,22 @@ class NotesPolicy
      */
     public function update(User $user, Notes $notes): bool
     {
-           // Si el usuario es owner o autor, puede actualizar la nota
-    if ($user->role == 'owner' || $user->role == 'autor') {
-        return true;
-    }
-    // Si el usuario es escritor, solo puede actualizar sus propias notas
-    elseif ($user->role == 'escritor') {
-        return $user->id === $notes->user_id;
-    }
-    // Si el usuario es lector, no puede actualizar notas
-    elseif ($user->role == 'lector') {
-        return false;
-    }
-    // Si el usuario no tiene un rol válido, no tiene acceso
-    else {
-        return false;
-    }
+          // Si el usuario es owner o autor, puede ver la nota
+          if ($user->rol_id == 1 || $user->rol_id == 2) {
+            return true;
+        }
+         // Si el usuario es escritor, solo puede ver y actualizar sus propias notas
+         elseif ($user->rol_id == 2) {
+            return $user->id === $notes->user_id;
+        }
+        // Si el usuario es lector, solo puede ver notas
+        elseif ($user->rol_id == 4) {
+            return true;
+        }
+        // Si el usuario no tiene un rol válido, no tiene acceso
+        else {
+            return false;
+        }
     }
 
     /**
@@ -75,17 +76,17 @@ class NotesPolicy
      */
     public function delete(User $user, Notes $notes): bool
     {
-             // Si el usuario es owner o autor, puede borrar la nota
-    if ($user->role == 'owner' || $user->role == 'autor') {
+       // Si el usuario es owner o autor, puede ver la nota
+       if ($user->rol_id == 1 || $user->rol_id == 2) {
         return true;
     }
-    // Si el usuario es escritor, solo puede borrar sus propias notas
-    elseif ($user->role == 'escritor') {
+     // Si el usuario es escritor, solo puede ver y actualizar sus propias notas
+     elseif ($user->rol_id == 2) {
         return $user->id === $notes->user_id;
     }
-    // Si el usuario es lector, no puede borrar notas
-    elseif ($user->role == 'lector') {
-        return false;
+    // Si el usuario es lector, solo puede ver notas
+    elseif ($user->rol_id == 4) {
+        return true;
     }
     // Si el usuario no tiene un rol válido, no tiene acceso
     else {

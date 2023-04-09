@@ -6,6 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
 
+use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
+//use Illuminate\Routing\Controller;
+
 class LoginController extends Controller
 {
     /*
@@ -19,7 +23,7 @@ class LoginController extends Controller
     |
     */
 
-    use AuthenticatesUsers;
+    use AuthenticatesUsers; 
 
     /**
      * Where to redirect users after login.
@@ -38,5 +42,11 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
-    
+    public function showLoginForm()
+    {
+        return view('auth.login');
+    }
+
+
+
 }

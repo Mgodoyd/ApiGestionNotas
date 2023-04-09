@@ -38,6 +38,7 @@ Route::post('logout', [App\Http\Controllers\Auth\LoginController::class, 'logout
 
 
 
+
 // Password Reset Routes...
 /*
 Route::get('password/reset', 'Auth\ForgotPasswordController@showLinkRequestForm')->name('password.request');
@@ -49,7 +50,7 @@ Route::post('password/reset', 'Auth\ResetPasswordController@reset');*/
 
 //Auth::routes();
 
-Route::get('/home/my-tokens', [App\Http\Controllers\HomeController::class,'getTokens'])->name('personal-tokens');
+Route::get('/home/my-users', [App\Http\Controllers\HomeController::class,'getUser'])->name('personal-tokens');
 Route::get('/home/my-clients', [App\Http\Controllers\HomeController::class,'getClients'])->name('personal-clients');
 Route::get('/home/authorized-clients', [App\Http\Controllers\HomeController::class,'getAuthorizedClients'])->name('authorized-clients');
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

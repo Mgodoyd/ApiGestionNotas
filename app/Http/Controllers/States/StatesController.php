@@ -8,11 +8,11 @@ use Illuminate\Http\Request;
 
 class StatesController extends ApiController
 {
-    public function __construct()
+   /* public function __construct()
     {
         $this->middleware('client.credentials')->only(['index', 'show']);
-        $this->middleware('scope:manage-rol-state')->except(['index']);
-    }
+        $this->middleware('scope:manage-rol-state')->except(['index', 'show']);
+    }*/
     /**
      * Display a listing of the resource.
      */

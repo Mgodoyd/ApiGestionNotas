@@ -53,6 +53,14 @@ Route::name('verify')->get('users/verify/{token}', 'App\Http\Controllers\User\Us
 Route::resource('rols', 'App\Http\Controllers\Rol\RolController', ['only' => ['index','show']]);  
 Route::resource('rols.users', 'App\Http\Controllers\Rol\RolUserController', ['only' => ['index']]);
 
+//auth
 Route::post('oauth/token', '\Laravel\Passport\Http\Controllers\AccessTokenController@issueToken');
+
+//login
+Route::post('/api/login', [App\Http\Controllers\Login\LoginController::class, 'login'])->name('api.login');
+
+
+
+
 
 

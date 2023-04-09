@@ -9,12 +9,12 @@ use Illuminate\Http\Request;
 
 class ReaderNotesController extends Apicontroller
 {
-    public function __construct()
+   /* public function __construct()
     {
         $this->middleware('client.credentials')->only(['index', 'show']);
          $this->middleware('scope:read-notes')->except(['index']);
          $this->middleware('can:view,notes')->only('index', 'show');
-    }
+    }*/
     /**
      * Display a listing of the resource.
      */

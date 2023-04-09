@@ -4,13 +4,14 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 
-use Illuminate\Support\Str;
+
+use App\Transformers\UserTransformer;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Facades\DB;
-use Laravel\Sanctum\HasApiTokens;
-use App\Transformers\UserTransformer;
+use Illuminate\Support\Str;
+use Laravel\Passport\HasApiTokens;
 
 class User extends Authenticatable
 {
@@ -19,7 +20,13 @@ class User extends Authenticatable
     const VERIFICADO = '1';
     const NO_VERIFICADO = '0';
 
+   /* const USUARIO_ADMINISTRADOR = 1;
+    const USUARIO_REGULAR = 'false';*/
+
+
     public $transformer = UserTransformer::class;
+
+    protected $table = 'users'; //con esto le decimos que la tabla se llama users para iniciar sesion con el modelo user
     protected $fillable = [  //campos que se pueden asignar de manera masiva
         'name',
         'email',
@@ -57,7 +64,7 @@ class User extends Authenticatable
     }
 
     // Verificación de usuario
-    public function getRoles()
+   /* public function getRoles()
     {
         $roles = [];
 
@@ -82,35 +89,16 @@ class User extends Authenticatable
         }
 
         return $roles;
-    }
-
+    }*/
     // Función para verificar el usuario
     public function isVerificado()
     {
         return $this->is_verificado === self::VERIFICADO;
     }
-
-    // Validación de roles de usuario
-    public function isAdmin()
-   {
-    return $this->rol === 'admin';
-   }
-
-    public function isAutor()
-   {
-    return $this->rol === 'autor';
-   }
-
-    public function isLector()
+    /*public function esAdministrador()
     {
-      return $this->rol === 'lector';
-    }
-
-    public function isEscritor()
-    {
-       return $this->rol === 'escritor';
-    }
-   
+        return $this->id == User::USUARIO_ADMINISTRADOR;
+    }*/
     //generar token de verificación 
     public static function generateVerificationToken()
     {
@@ -124,7 +112,7 @@ class User extends Authenticatable
 
 public function roles()
 {
-    return $this->belongsToMany(Rol::class, 'rol_user');
-}
+    return $this->belongsToMany(Rol::class, 'rol_user'); //estoy accesando a la tabla rol_user que es la que relaciona los roles con los usuarios
+} 
 
 }

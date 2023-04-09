@@ -12,7 +12,7 @@ use App\Transformers\AuthorTransformer;
 class AuthorNotesController extends Apicontroller
 {
 
-    public function __construct()
+   /* public function __construct()
     {
         $this->middleware('client.credentials')->only(['index']);
         $this->middleware('auth:api')->except(['index']);
@@ -21,7 +21,7 @@ class AuthorNotesController extends Apicontroller
         $this->middleware('can:view,notes')->only('show');
         $this->middleware('can:update,notes')->only('update');
         $this->middleware('can:delete,notes')->only('destroy');
-    } 
+    } */
     /**
      * Display a listing of the resource.
      */

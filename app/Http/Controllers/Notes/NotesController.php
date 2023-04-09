@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Notes;
 
 use App\Http\Controllers\Apicontroller;
+use App\Http\Middleware\checkscopes;
 use App\Models\Notes;
 use Illuminate\Http\Request;
 use App\Transformers\NotesTransformer;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Passport\Http\Middleware\CheckClientCredentials;
 
 
@@ -15,11 +17,16 @@ class NotesController extends Apicontroller
     {
         $this->middleware('client.credentials')->only(['index', 'show']);
         $this->middleware('auth:api')->except(['index', 'show']);
-        $this->middleware('transform.input:' . NotesTransformer::class)->only(['store', 'update']);
-        $this->middleware('scope:manage-notes') //sirve para que solo los usuarios con el scope de manage-notes puedan acceder a las rutas
-            ->only(['store', 'update', 'destroy']);
-        $this->middleware('can:view,notes')->only('show'); //sirve para que solo los usuarios con el scope de manage-notes puedan acceder a las rutas
+       // $this->middleware('transform.input:' . NotesTransformer::class)->only(['store', 'update']);
+        $this->middleware('scope:update-notes')->only(['store', 'update', 'destroy']);
+        $this->middleware('scope:read-notes')->only(['store', 'update', 'destroy']);
+        $this->middleware('scope:manage-rol-state')->only(['store', 'update', 'destroy']);
+        $this->middleware('scope:manage-account')->only(['store', 'update', 'destroy']);
+        $this->middleware('scope:manage-notes')->only(['store', 'update', 'destroy']);
+      //  $this->middleware('check.scopes')->except(['index', 'show']); 
+
     }
+    
     /**
      * Display a listing of the resource.
      */

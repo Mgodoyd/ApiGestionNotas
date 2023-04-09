@@ -24,7 +24,7 @@ class Rol extends Model
     {
         return static::all();
     }
-    protected $fillable = [
+    protected $fillable = [ 
         'id',
         'name_role',
     ];

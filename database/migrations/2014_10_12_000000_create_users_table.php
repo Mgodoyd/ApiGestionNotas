@@ -25,7 +25,7 @@ return new class extends Migration
             $table->integer('rol_id')->unsigned();
             $table->timestamps();//
 
-            $table->foreign('rol_id')->references('id')->on('rols');
+          $table->foreign('rol_id')->references('id')->on('rols');
         });
     }
 

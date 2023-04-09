@@ -25,7 +25,7 @@ class HomeController extends Controller
     {
         return view('home');
     }
-
+/*
     public function getTokens(){
         return view('home.personal-tokens');
     }
@@ -38,5 +38,5 @@ class HomeController extends Controller
     public function getAuthorizedClients()
     {
         return view('home.authorized-clients');
-    }
+    }*/
 }

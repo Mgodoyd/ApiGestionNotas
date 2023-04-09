@@ -12,16 +12,15 @@ use App\Transformers\AuthorTransformer;
 class AuthorNotesController extends Apicontroller
 {
 
-   /* public function __construct()
+    public function __construct()
     {
         $this->middleware('client.credentials')->only(['index']);
         $this->middleware('auth:api')->except(['index']);
         $this->middleware('transform.input' . AuthorTransformer::class)->only(['store', 'update']);
-        $this->middleware('scope:manage-notes');
-        $this->middleware('can:view,notes')->only('show');
-        $this->middleware('can:update,notes')->only('update');
-        $this->middleware('can:delete,notes')->only('destroy');
-    } */
+        $this->middleware('scope:update')->only(['update']);
+        $this->middleware('scope:store')->only(['store']);
+        $this->middleware('scope:destroy')->only(['destroy']);
+    } 
     /**
      * Display a listing of the resource.
      */

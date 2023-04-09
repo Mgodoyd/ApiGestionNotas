@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Transformers\NotesTransformer;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Passport\Http\Middleware\CheckClientCredentials;
+use Illuminate\Auth\Access\AuthorizationException;
 
 
 class NotesController extends Apicontroller
@@ -18,14 +19,27 @@ class NotesController extends Apicontroller
         $this->middleware('client.credentials')->only(['index', 'show']);
         $this->middleware('auth:api')->except(['index', 'show']);
        // $this->middleware('transform.input:' . NotesTransformer::class)->only(['store', 'update']);
-        $this->middleware('scope:update-notes')->only(['store', 'update', 'destroy']);
-        $this->middleware('scope:read-notes')->only(['store', 'update', 'destroy']);
-        $this->middleware('scope:manage-rol-state')->only(['store', 'update', 'destroy']);
-        $this->middleware('scope:manage-account')->only(['store', 'update', 'destroy']);
-        $this->middleware('scope:manage-notes')->only(['store', 'update', 'destroy']);
+      //  $this->middleware('scope:update-notes')->only(['update']);
+       // $this->middleware('scope:manage-rol-state')->only(['store', 'update', 'destroy']);
+       // $this->middleware('scope:manage-account')->only(['store', 'update', 'destroy']);
+     //   $this->middleware('scope:manage-notes')->only(['store', 'update', 'destroy']);
       //  $this->middleware('check.scopes')->except(['index', 'show']); 
+      $this->middleware('scope:update')->only(['update']);
+        $this->middleware('scope:store')->only(['store']);
+        $this->middleware('scope:destroy')->only(['destroy']);
+
 
     }
+   
+
+
+    // ...
+
+  
+
+    // ...
+
+
     
     /**
      * Display a listing of the resource.
@@ -41,7 +55,8 @@ class NotesController extends Apicontroller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
+    { 
+        
         $request->validate([
             'title' => 'required|unique:notes,title|max:255',
             'content' => 'required',

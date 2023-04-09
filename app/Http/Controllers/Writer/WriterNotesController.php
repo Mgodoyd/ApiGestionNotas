@@ -10,15 +10,13 @@ use App\Transformers\WriterTransformer;
 
 class WriterNotesController extends Apicontroller
 {
-/*    public function __construct(){
+   public function __construct(){
 
         $this->middleware('client.credentials')->only(['index','show']);  //sirve para que solo el cliente pueda ver las notas
         $this->middleware('auth:api')->except(['index','show']); //sirve para que solo el cliente pueda ver las notas
         $this->middleware('transform.input' . WriterTransformer::class)->only(['update']);
-        $this->middleware('scope:update-notes')->except(['index','show']); //sirve para que solo el cliente pueda ver las notas
-        $this->middleware('can:update,notes')->only('update'); //sirve para que solo el cliente pueda ver las notas
-        $this->middleware('can:view,notes')->only('index','show');
-    }*/
+        $this->middleware('scope:update')->only(['update']);
+    }
     /**
      * Display a listing of the resource.
      */

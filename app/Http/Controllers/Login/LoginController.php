@@ -43,23 +43,24 @@ class LoginController extends Controller
     $credentials = $request->only('email', 'password', 'rol_id');
 
     if (Auth::attempt($credentials)) {
-        $rol_id = $request->input('rol_id');
+       
         $user = Auth::user();
-       //var_dump($user);
+        $rol_id = $request->input('rol_id');
+      // var_dump($user);
         $scopes = [];
        
         switch ($rol_id) {
             case 1:
-                $scopes = ['manage-notes', 'manage-account', 'manage-rol-state','update-notes','read-notes']; //owner
+            $scopes = [/*'manage-notes'*/'manage-account', 'manage-rol-state'/*'update-notes'*/,'update','store','destroy']; //owner
                 break;
             case 2:
-                $scopes = ['manage-notes'];//author
+                $scopes = ['update','store','destroy'];//author
                 break;
             case 3:
-                $scopes = ['update-notes'];//writer
+                $scopes = ['update'];//writer
                 break;
             case 4:
-                $scopes = ['read-notes'];//reader
+                $scopes = [ ];//reader
                 break;
             default:
                 // En caso de que el rol_id no coincida con ninguno de los casos anteriores

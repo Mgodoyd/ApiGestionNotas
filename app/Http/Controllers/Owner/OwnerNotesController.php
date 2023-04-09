@@ -15,24 +15,15 @@ use App\Transformers\OwnerTransformer;
 class OwnerNotesController extends Apicontroller
 {
 
-  /*  public function __construct()
+   public function __construct()
     {
         $this->middleware('client.credentials')->only(['index']); //tiene que estar autenticado para crear una nota
         $this->middleware('auth:api')->except(['index']); //tiene que estar autenticado para crear una nota
-       // $this->middleware('transform.input' . OwnerTransformer::class)->only(['store', 'update']);
-      // $this->middleware('scope:manage-notes')->only(['store', 'update', 'destroy']);
-        $this->middleware('can:update,notes')->only('update');
-        $this->middleware('can:delete,notes')->only('destroy');
+        $this->middleware('scope:update')->only(['update']);
+        $this->middleware('scope:store')->only(['store']);
+        $this->middleware('scope:destroy')->only(['destroy']);
 
 
-    }*/
-    public function __construct()
-    {
-        $this->middleware('client.credentials')->only(['index', 'show']);
-        $this->middleware('auth:api')->except(['index', 'show']);
-      //  $this->middleware('transform.input:' . NotesTransformer::class)->only(['store', 'update']);
-      //  $this->middleware('scope:manage-notes')->only(['store', 'update', 'destroy']);
-        $this->middleware('check.scopes')->except(['index', 'show']);
     }
     
     /**

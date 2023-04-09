@@ -13,21 +13,14 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 class UserController extends ApiController
 {
 
-    /*public function __construct()
+    public function __construct()
     {
-        $this->middleware('client.credentials')->only(['index', 'show']);
-        $this->middleware('auth:api')->except(['index', 'show','verify']);
-        $this->middleware('scope:manage-account')->except(['index', 'show']);
-       // $this->middleware('transform.input' . UserTransformer::class)->only(['store', 'update']);
-       /*$this->middleware('can:view,notes')->only('show');
-       $this->middleware('can:update,notes')->only('update');
-       $this->middleware('can:delete,notes')->only('destroy');*/
-      // $this->middleware('can:view,user')->only('show');
-      /*   $this->middleware('can:update,user')->only('update');
-         $this->middleware('can:delete,user')->only('destroy');
-    } */
-  /*  
-    $user = Auth::user();
+       // $this->middleware('client.credentials')->only(['index', 'show']);
+        $this->middleware('auth:api')->except(['verify']);
+        $this->middleware('scope:manage-account')->only(['index', 'show','store', 'update', 'destroy']);
+    } 
+   
+   /* $user = Auth::user();
     $users = User::findOrFail($id);
     $this->authorize('view', [$notes, $user->rol_id]);*/
     

@@ -97,6 +97,11 @@ class Handler extends ExceptionHandler
         });
     }*/
 
+  
+      
+        
+    
+
     protected function unauthenticated($request, AuthenticationException $exception){
         if($this->isFronted($request)){
             return redirect()->guest('login');

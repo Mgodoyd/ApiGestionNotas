@@ -37,11 +37,13 @@ class AuthServiceProvider extends ServiceProvider
         Passport::enableImplicitGrant();
 
        Passport::tokensCan([
-            'update-notes' => 'Actualizar Notas y ver notas',
-            'read-notes' => 'Ver notas', 
-            'manage-notes' => 'Crear, ver, actualizar y eliminar notas',
+          // 'read-notes' => 'Ver notas', 
+          //  'manage-notes' => 'Crear, ver, actualizar y eliminar notas',
             'manage-rol-state' => 'ver los roles y estados disponibles',
             'manage-account' => 'Obtener la informacion de la cuenta, nombre, email, estado (sin contraseña), modificar datos como email, nombre y contraseña.',
+            'update' => 'actualizar notas',
+            'store' => 'crear notas',
+            'destroy' => 'eliminar notas',
         ]);
     
        /* Passport::setDefaultScope([

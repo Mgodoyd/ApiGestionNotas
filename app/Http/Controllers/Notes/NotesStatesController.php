@@ -14,6 +14,8 @@ class NotesStatesController extends Apicontroller
     public function __construct()
     {
         $this->middleware('client.credentials')->only(['index']);
+        $this->middleware('auth:api')->only(['index']);
+       $this->middleware('scope:manage-rol-state')->only(['index']);
     }
 
     public function index($id)

@@ -15,9 +15,8 @@ class UserPolicy
      */
     
      public function update(User $authenticatedUser, User $user): bool
-{  
-    dd($authenticatedUser->rol_id, $user->rol_id);  
-    return $authenticatedUser->rol_id === $user->rol_id; 
+{        // Si el usuario es owner o autor, puede ver la nota
+    return $user->id === $user->id;
 }
 
     /**
@@ -25,11 +24,8 @@ class UserPolicy
      */
     public function delete(User $authenticatedUser, User $user): bool
     {
-        return $authenticatedUser->rol_id === $user->rol_id;
- 
-   // return $authenticatedUser->rol_id === $user->rol_id;
+             // Si el usuario es owner o autor, puede ver la nota
+             return $user->id === $user->id;
 
-
-    }
-
+}
 }

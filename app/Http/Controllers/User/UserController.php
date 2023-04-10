@@ -17,10 +17,10 @@ class UserController extends ApiController
        // $this->middleware('client.credentials')->only(['index', 'show']);
         $this->middleware('auth:api')->except(['verify']);
         $this->middleware('scope:manage-account')->only(['index', 'show','store', 'update', 'destroy']);
-      //  $this->middleware('can:access-owner')->only(['update', 'destroy']);
+      //  $this->middleware('can:update,user')->only(['update']);
 
-        /*$this->middleware('can:update,user')->only('update');
-        $this->middleware('can:delete,user')->only('destroy');*/
+       /* $this->middleware('can:update,users')->only('update');
+        $this->middleware('can:delete,users')->only('destroy');*/
     } 
    
    /* $user = Auth::user();
@@ -60,6 +60,8 @@ class UserController extends ApiController
       //  $roles = Rol::allRoles();
     
       //  $validated = 
+    
+    
           $request -> validate([
            'name' => 'required',
            'email' => 'required|email|unique:users',
@@ -101,6 +103,7 @@ class UserController extends ApiController
     public function update(Request $request, User $user)
     {
        // $user = User::where('id', $id)->first();
+       
 
         $usuarioExistente = User::where('email', $request->input('email'))->exists();
     

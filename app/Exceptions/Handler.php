@@ -13,6 +13,7 @@ use Illuminate\Validation\ValidationException;
 use Illuminate\Http\Request;
 use Illuminate\Http\RedirectResponse;
 
+
 class Handler extends ExceptionHandler
 {
 
@@ -39,6 +40,8 @@ class Handler extends ExceptionHandler
         if($exception instanceof ValidationException){
             return $this->convertValidationExceptionToResponse($exception, $request);
         }
+
+        
         if($exception instanceof ModelNotFoundException){
             $modelo = strtolower(class_basename($exception->getModel()));
             return $this->errorResponse('No se encontro ninguna instancia de'.'  '.$modelo.'  '.'con el id especificado', 404);
@@ -46,9 +49,10 @@ class Handler extends ExceptionHandler
         if($exception instanceof AuthenticationException){
             return $this->unauthenticated($request, $exception);
         }
-        if($exception instanceof AuthenticationException){
-            return $this->errorResponse('No posee permisos para ejecutar esta accion', 403);
+        if ($exception instanceof AuthenticationException && $request->expectsJson()) {
+            return response()->json(['error' => 'No autenticado'], 401);
         }
+        
         if($exception instanceof NotFoundHttpException){
             return $this->errorResponse('No se encontro la URL especificada', 404);
         }
@@ -76,6 +80,9 @@ class Handler extends ExceptionHandler
 ;
      }
 
+// ...
+
+
     /**
      * A list of the inputs that are never flashed to the session on validation exceptions.
      *
@@ -96,8 +103,8 @@ class Handler extends ExceptionHandler
             //
         });
     }*/
+    
 
-  
       
         
     
@@ -107,7 +114,7 @@ class Handler extends ExceptionHandler
             return redirect()->guest('login');
         }
 
-        return $this->errorResponse('No autenticado', 401);
+        return $this->errorResponse('No autorizado', 403);
     }
     protected function convertValidationExceptionToResponse( $e, $request)
     {

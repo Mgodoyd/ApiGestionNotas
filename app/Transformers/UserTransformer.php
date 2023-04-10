@@ -30,7 +30,7 @@ class UserTransformer extends TransformerAbstract
      *
      * @return array
      */
-    public function transform(User $user)
+   public function transform(User $user)
     {
         return [
             'identificador' => (int) $user->id,
@@ -46,12 +46,8 @@ class UserTransformer extends TransformerAbstract
                         'rel' => 'self',
                         'href' => route('users.show', $user->id),
                     ],
-                   /* [
-                        'rel' => 'user.notes',
-                        'href' => route('users.notes', $user->id),
-                    ],*/
                 
-             ]
+            ]
 
         ];
     }

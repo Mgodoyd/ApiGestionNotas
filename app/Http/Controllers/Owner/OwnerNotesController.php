@@ -23,7 +23,7 @@ class OwnerNotesController extends Apicontroller
         $this->middleware('scope:store')->only(['store']);
         $this->middleware('scope:destroy')->only(['destroy']);
 
-
+ 
     }
     
     /**

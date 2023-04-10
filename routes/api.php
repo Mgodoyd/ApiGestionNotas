@@ -49,7 +49,6 @@ Route::resource('rols.users', 'App\Http\Controllers\Rol\RolUserController', ['on
 Route::resource('users', 'App\Http\Controllers\User\UserController' , ['except' => ['create','edit']]); 
 Route::name('verify')->get('users/verify/{token}', 'App\Http\Controllers\User\UserController@verify');
 
-
 //auth
 Route::post('oauth/token', '\Laravel\Passport\Http\Controllers\AccessTokenController@issueToken');
 

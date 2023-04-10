@@ -16,7 +16,7 @@ class AuthorNotesController extends Apicontroller
     {
         $this->middleware('client.credentials')->only(['index']);
         $this->middleware('auth:api')->except(['index']);
-        $this->middleware('transform.input' . AuthorTransformer::class)->only(['store', 'update']);
+       // $this->middleware('transform.input' . AuthorTransformer::class)->only(['store', 'update']);
         $this->middleware('scope:update')->only(['update']);
         $this->middleware('scope:store')->only(['store']);
         $this->middleware('scope:destroy')->only(['destroy']);
@@ -24,9 +24,10 @@ class AuthorNotesController extends Apicontroller
     /**
      * Display a listing of the resource.
      */
-    public function index(/**owner $owner*/)
+    public function index(/**owner $owner*/) 
         {
            $notas = Notes::all();
+           var_dump($notas);
             return $this->showAll($notas);
           /*  $notas = $owner->notes;
             return $this->showAll($notas);*/

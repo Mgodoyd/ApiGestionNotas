@@ -6,9 +6,8 @@ use App\Http\Controllers\ApiController;
 use App\Models\Notes;
 use App\Models\Rol;
 use App\Models\User;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use App\Transformers\UserTransformer;
-use Symfony\Component\HttpFoundation\JsonResponse;
 
 class UserController extends ApiController
 {
@@ -18,6 +17,10 @@ class UserController extends ApiController
        // $this->middleware('client.credentials')->only(['index', 'show']);
         $this->middleware('auth:api')->except(['verify']);
         $this->middleware('scope:manage-account')->only(['index', 'show','store', 'update', 'destroy']);
+      //  $this->middleware('can:access-owner')->only(['update', 'destroy']);
+
+        /*$this->middleware('can:update,user')->only('update');
+        $this->middleware('can:delete,user')->only('destroy');*/
     } 
    
    /* $user = Auth::user();
@@ -96,15 +99,27 @@ class UserController extends ApiController
      * Update the specified resource in storage.
      */
     public function update(Request $request, User $user)
-    { 
-      
-       /*$validatedData = $request->validate([ //valida los campos
-            'email' => 'email|unique:users,' . $user->id, //
-          //  'rol_id' => 'in:' . Rol::allRoles()->implode('id', ','),
-        ]);
+    {
+       // $user = User::where('id', $id)->first();
 
-        $user->fill($validatedData);
+        $usuarioExistente = User::where('email', $request->input('email'))->exists();
     
+    if ($usuarioExistente) {
+   return $this->errorResponse('Ya existe un usuario con el mismo Email', 400);
+       }
+      
+       //var_dump($user);
+       $request->validate([
+        'email' => 'email',
+    ]);
+  //  dd($request);
+$user->fill($request->only([
+    'email',
+]));
+       
+
+
+    //  dd($user);
     
         if($request->has('name')){  //si el request tiene el campo name
             $user->name = $request->name;   //se actualiza el nombre   
@@ -129,19 +144,20 @@ class UserController extends ApiController
         }
         
         if ($user->isDirty()) {
+            //var_dump($user);
             $user->save();
         } else {
             return $this->errorResponse('Se debe especificar al menos un valor diferente para actualizar', 422);
         }
        
-        return $this->showOne($user, 200);*/
-        $user->fill($request->all());
+        return $this->showOne($user, 200);
+      /*  $user->fill($request->all());
         //colocar la password encriptada
         if (!$user->isDirty()) {
             return $this->errorResponse('Se debe especificar al menos un valor diferente para actualizar', 422);
         }
         $user->save();
-        return $this->showOne($user, 200);
+        return $this->showOne($user, 200);*/
     }
 
     /**

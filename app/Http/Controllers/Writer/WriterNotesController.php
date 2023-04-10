@@ -14,7 +14,7 @@ class WriterNotesController extends Apicontroller
 
         $this->middleware('client.credentials')->only(['index','show']);  //sirve para que solo el cliente pueda ver las notas
         $this->middleware('auth:api')->except(['index','show']); //sirve para que solo el cliente pueda ver las notas
-        $this->middleware('transform.input' . WriterTransformer::class)->only(['update']);
+       // $this->middleware('transform.input' . WriterTransformer::class)->only(['update']);
         $this->middleware('scope:update')->only(['update']);
     }
     /**
@@ -36,15 +36,17 @@ class WriterNotesController extends Apicontroller
             return $this->showOne($nota, 200);
    }
     
-
+ 
  
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, string $title)
         {
-            $nota = Notes::find($id);
+            $nota = Notes::where('title', $title)->first();
+            
+            
 
             if (!$nota) {
                 return $this->errorResponse('La nota no existe', 404);
@@ -58,11 +60,12 @@ class WriterNotesController extends Apicontroller
                 $nota->content = $request->content;
             }
 
-            if($request->has('state_id')){
+            if($request->has('states_id')){
                 $nota->state_id = $request->state_id;
             }
            
            if ($nota->isDirty()) {
+             var_dump($nota->isClean());
                 $nota->save();
                 return $this->showOne($nota, 200);
             } else {

@@ -3,8 +3,6 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\ApiController;
-use App\Models\Notes;
-use App\Models\Rol;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -12,118 +10,53 @@ use Illuminate\Http\Request;
 class UserController extends ApiController
 {
 
-    public function __construct()
+    public function __construct()//constructor de la clase y se le pasa el middleware para que solo se pueda acceder a los metodos de esta clase si se esta autenticado
     {
        // $this->middleware('client.credentials')->only(['index', 'show']);
         $this->middleware('auth:api')->except(['verify']);
         $this->middleware('scope:manage-account')->only(['index', 'show','store', 'update', 'destroy']);
-      //  $this->middleware('can:update,user')->only(['update']);
-
-       /* $this->middleware('can:update,users')->only('update');
-        $this->middleware('can:delete,users')->only('destroy');*/
     } 
-   
-   /* $user = Auth::user();
-    $users = User::findOrFail($id);
-    $this->authorize('view', [$notes, $user->rol_id]);*/
-    
-   // ...
-    
-   
-
-
-    public function index()
+    public function index()//metodo para mostrar todos los usuarios
     {
         $usuarios = User::all();
         return $this->showAll($usuarios);
     }
-
-    public function index2()
-{
-    
-}
-
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function store(Request $request) //metodo para crear un usuario
     {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-      //  $roles = Rol::allRoles();
-    
-      //  $validated = 
-    
-    
           $request -> validate([
            'name' => 'required',
            'email' => 'required|email|unique:users',
-            'password' => 'min:8',
-           // 'role' => 'required|in:' . $roles->implode('id', ','),
+           'password' => 'min:8',
         ]);
   
         $campos = $request->all();
         $campos['password'] = bcrypt($request->password);
         $campos['verified'] = User::NO_VERIFICADO;
         $campos['verification_token'] = User::generateVerificationToken();
-       /// $campos['rol_id'] = $validated['role'];*
-    
+     
         $usuario = User::create($campos);
         return $this->showOne($usuario, 201);
     }
-    
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(User $user)
+    public function show(User $user) //metodo para mostrar un usuario
     {
-        
-        return $this->showOne($user, 200);
+         return $this->showOne($user, 200);
     }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
+    public function update(Request $request, User $user) //metodo para actualizar un usuario
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, User $user)
-    {
-       // $user = User::where('id', $id)->first();
-       
-
         $usuarioExistente = User::where('email', $request->input('email'))->exists();
     
-    if ($usuarioExistente) {
-   return $this->errorResponse('Ya existe un usuario con el mismo Email', 400);
+       if ($usuarioExistente) {
+           return $this->errorResponse('Ya existe un usuario con el mismo Email', 400);
        }
       
-       //var_dump($user);
-       $request->validate([
-        'email' => 'email',
-    ]);
-  //  dd($request);
-$user->fill($request->only([
-    'email',
-]));
+         $request->validate([
+          'email' => 'email',
+          'password' => 'min:8',]);
+
+        $user->fill($request->only([
+           'email',
+        ]));
        
-
-
-    //  dd($user);
-    
         if($request->has('name')){  //si el request tiene el campo name
             $user->name = $request->name;   //se actualiza el nombre   
         }
@@ -147,34 +80,19 @@ $user->fill($request->only([
         }
         
         if ($user->isDirty()) {
-            //var_dump($user);
             $user->save();
         } else {
             return $this->errorResponse('Se debe especificar al menos un valor diferente para actualizar', 422);
         }
        
         return $this->showOne($user, 200);
-      /*  $user->fill($request->all());
-        //colocar la password encriptada
-        if (!$user->isDirty()) {
-            return $this->errorResponse('Se debe especificar al menos un valor diferente para actualizar', 422);
-        }
-        $user->save();
-        return $this->showOne($user, 200);*/
     }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(User $user)
+       public function destroy(User $user) //metodo para eliminar un usuario
     {
-    
         $user->delete();
-    
         return $this->showOne($user, 200);
     }
-
-    public function verify($token)
+     public function verify($token)//metodo para verificar un usuario
     {
         $user = User::where('verification_token', $token)->firstOrFail();
         $user->is_verificado = User::VERIFICADO;
@@ -183,7 +101,4 @@ $user->fill($request->only([
     
         return new JsonResponse('El usuario ha sido verificado', 200);
     }
-    
-
-    
 }

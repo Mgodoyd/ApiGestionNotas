@@ -11,8 +11,6 @@ use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Throwable;
 use Illuminate\Validation\ValidationException;
-use Illuminate\Http\Request;
-use Illuminate\Http\RedirectResponse;
 
 
 class Handler extends ExceptionHandler
@@ -38,34 +36,40 @@ class Handler extends ExceptionHandler
     ];
     
      public function render($request, Throwable $exception){
-        if($exception instanceof ValidationException){
+
+        if($exception instanceof ValidationException){        //para errores de validacion
             return $this->convertValidationExceptionToResponse($exception, $request);
-        }
-        if ($exception instanceof AuthorizationException) {
+        } 
+
+        if ($exception instanceof AuthorizationException) { //para errores de autorizacion
             return response()->json(['error' => 'No autorizado'], 403);
         }
         
-        if($exception instanceof ModelNotFoundException){
+        if($exception instanceof ModelNotFoundException){ //para errores de modelo
             $modelo = strtolower(class_basename($exception->getModel()));
             return $this->errorResponse('No se encontro ninguna instancia de'.'  '.$modelo.'  '.'con el id especificado', 404);
         }
-        if($exception instanceof AuthenticationException){
+        if($exception instanceof AuthenticationException){ //para errores de autenticacion
             return $this->unauthenticated($request, $exception);
         }
-        if ($exception instanceof AuthenticationException && $request->expectsJson()) {
+
+        if ($exception instanceof AuthenticationException && $request->expectsJson()) { //para errores de autenticacion
             return response()->json(['error' => 'No autenticado'], 401);
         }
         
-        if($exception instanceof NotFoundHttpException){
+        if($exception instanceof NotFoundHttpException){ //para errores de URL
             return $this->errorResponse('No se encontro la URL especificada', 404);
         }
-        if($exception instanceof MethodNotAllowedHttpException){
+
+        if($exception instanceof MethodNotAllowedHttpException){ //para errores de metodo no permitido
             return $this->errorResponse('El metodo especificado en la peticion no es valido', 405);
         }
+
         if($exception instanceof HttpException){  //para errores de tipo 404, 405, 500, etc se implementa esta condicion si no se implementan las ultimas 2 condiciones de arriba
             return $this->errorResponse($exception->getMessage(), $exception->getStatusCode());
         }
-        if($exception instanceof QueryException){ 
+
+        if($exception instanceof QueryException){ //para errores de base de datos
             $codigo = $exception->errorInfo[1];
           // dd($exception);
             if($codigo == 547){
@@ -73,7 +77,7 @@ class Handler extends ExceptionHandler
             }
         }
 
-        if($exception instanceof TokenMismatchException){
+        if($exception instanceof TokenMismatchException){ //para errores de token
             return redirect()->back()->withInput($request->input());
         }
         if(config('app.debug')){   //si estamos en modo debug, se muestra el error
@@ -100,26 +104,15 @@ class Handler extends ExceptionHandler
     /**
      * Register the exception handling callbacks for the application.
      */
-    /*public function register(): void
-    {
-        $this->reportable(function (Throwable $e) {
-            //
-        });
-    }*/
     
-
-      
-        
-    
-
-    protected function unauthenticated($request, AuthenticationException $exception){
+    protected function unauthenticated($request, AuthenticationException $exception){ //para errores de autenticacion
         if($this->isFronted($request)){
             return redirect()->guest('login');
         }
 
-        return $this->errorResponse('No autorizado', 403);
+        return $this->errorResponse('No autenticado', 403);
     }
-    protected function convertValidationExceptionToResponse( $e, $request)
+    protected function convertValidationExceptionToResponse( $e, $request)  //para errores de validacion
     {
         $errors = $e->validator->errors()->getMessages();
         if($this->isFronted($request)){
@@ -129,11 +122,9 @@ class Handler extends ExceptionHandler
                    ->withErrors($errors);
                 }
             return $this->errorResponse($errors, 422);
-       
-        
     }
 
-    private function isFronted($request){
+    private function isFronted($request){   //se utiliza para determinar si una solicitud HTTP está dirigida a la aplicación web o si es una solicitud API
         return $request->acceptsHtml() && collect($request->route()->middleware())->contains('web');
     }
 }

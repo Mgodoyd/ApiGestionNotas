@@ -5,7 +5,6 @@ namespace App\Providers;
 // use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 use Illuminate\Support\Carbon;
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Gate;
 use Laravel\Passport\Passport;
 
@@ -40,54 +39,12 @@ class AuthServiceProvider extends ServiceProvider
         Passport::refreshTokensExpireIn(Carbon::now()->addDays(30));
         Passport::enableImplicitGrant();
 
-       Passport::tokensCan([
-          // 'read-notes' => 'Ver notas', 
-          //  'manage-notes' => 'Crear, ver, actualizar y eliminar notas',
+       Passport::tokensCan([ //permisos que se pueden dar a los usuarios
             'manage-rol-state' => 'ver los roles y estados disponibles',
             'manage-account' => 'Obtener la informacion de la cuenta, nombre, email, estado (sin contraseña), modificar datos como email, nombre y contraseña.',
             'update' => 'actualizar notas',
             'store' => 'crear notas',
             'destroy' => 'eliminar notas',
         ]);
-    
-       /* Passport::setDefaultScope([
-            'read-notes'
-        ]);
-    
-        Passport::tokensCan([
-            'manage-notes' => 'Manage notes scope', //Crear, ver, actualizar y eliminar notas
-        ]);
-    
-        Passport::tokensCan([
-            'manage-account' => 'Manage account scope', 
-        ]);
-    
-        Passport::tokensCan([
-            'manage-rol-state' => 'Manage rol state scope',
-        ]);
-    
-        Passport::tokensCan([
-            'update-notes' => 'Update notes scope',
-        ]);
-    
-        Passport::tokensCan([
-            'read-notes' => 'Read notes scope',
-        ]);
-        
-       /* Passport::tokensCan([
-            'owner' => 'Owner scope', 
-        ]);
-        
-        Passport::tokensCan([
-            'author' => 'Author scope',
-        ]);
-    
-        Passport::tokensCan([
-            'writer' => 'Writer scope',
-        ]);
-    
-        Passport::tokensCan([
-            'reader' => 'Reader scope',
-        ]);*/
     }
 }

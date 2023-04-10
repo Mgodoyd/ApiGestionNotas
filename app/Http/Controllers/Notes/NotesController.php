@@ -3,61 +3,29 @@
 namespace App\Http\Controllers\Notes;
 
 use App\Http\Controllers\Apicontroller;
-use App\Http\Middleware\checkscopes;
 use App\Models\Notes;
 use App\Models\States;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\DB;
-use Laravel\Passport\Http\Middleware\CheckClientCredentials;
-use Illuminate\Auth\Access\AuthorizationException;
-
 
 class NotesController extends Apicontroller
 {
 
  
-    public function __construct()
+    public function __construct()  //constructor de la clase y se le pasa el middleware para que solo se pueda acceder a los metodos de esta clase si se esta autenticado
     {
         $this->middleware('client.credentials')->only(['index', 'show']);
         $this->middleware('auth:api')->except(['index', 'show']);
-       // $this->middleware('transform.input:' . NotesTransformer::class)->only(['store', 'update']);
-      //  $this->middleware('scope:update-notes')->only(['update']);
-       // $this->middleware('scope:manage-rol-state')->only(['store', 'update', 'destroy']);
-       // $this->middleware('scope:manage-account')->only(['store', 'update', 'destroy']);
-     //   $this->middleware('scope:manage-notes')->only(['store', 'update', 'destroy']);
-      //  $this->middleware('check.scopes')->except(['index', 'show']); 
-      $this->middleware('scope:update')->only(['update']);
+        $this->middleware('scope:update')->only(['update']);
         $this->middleware('scope:store')->only(['store']);
         $this->middleware('scope:destroy')->only(['destroy']);
-
-
     }
    
-
-
-    // ...
-
-  
-
-    // ...
-
-
-     
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index() //metodo para mostrar todas las notas
     {
          $notes = Notes::all();
          return $this->showAll($notes);
     }
-
- 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
+    public function store(Request $request) //metodo para crear una nota
     { 
         
         $request->validate([
@@ -65,13 +33,6 @@ class NotesController extends Apicontroller
             'content' => 'required|max:255',
             'user_id' => 'required',
         ]);
-
-       // $owner = auth()->user();
-      /*  $note = new Notes([
-            'title' => $request->input('title'),
-            'body' => $request->input('body'),
-        ]);
-        $note->owner()->associate($owner);*/
         
        $notaExistente = Notes::where('title', $request->input('title'))->exists();
     
@@ -79,45 +40,32 @@ class NotesController extends Apicontroller
            return $this->errorResponse('Ya existe una nota con el mismo título', 400);
         }
         $campos = $request->all();
-        
-        //$campos['users_id'] = auth()->user()->id;
-        
 
         $campos['states_id'] = 1;
         $nota = Notes::create($campos);
         return $this->showOne($nota, 201);
     }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
+    public function show(string $id) //metodo para mostrar una nota
     {
         $nota = Notes::findOrFail($id);
         return $this->showOne($nota, 200);
     }
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request,string $id)
+    public function update(Request $request,string $id) //metodo para actualizar una nota
     {
         $notes = Notes::where('id', $id)->first();
-       /* if (!$notes) {
-            dd('Registro no encontrado');
-        }*/
-        
+
         $request->validate([
             'title' => 'string|max:255',
             'content' => 'string',
             'states_id' => 'integer|exists:states,id',
         ]);
-      //  dd($request);
-    $notes->fill($request->only([
-        'title',
-        'content',
-        'states_id',
-        'user_id',
-    ]));
+
+        $notes->fill($request->only([
+           'title',
+           'content',
+           'states_id',
+           'user_id',
+        ]));
     
     if (!$notes->isDirty()) {
         return $this->errorResponse('Se debe especificar al menos un valor diferente para actualizar', 422);
@@ -138,13 +86,8 @@ class NotesController extends Apicontroller
     }
 
     return $this->showOne($notes);
-
 }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
+    public function destroy(string $id) //metodo para eliminar una nota
     {
         $notes = Notes::findOrFail($id);
         $notes->delete();

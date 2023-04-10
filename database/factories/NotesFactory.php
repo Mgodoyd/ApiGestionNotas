@@ -11,18 +11,13 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class NotesFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
-    public function definition(): array
+    public function definition(): array//genera datos aleatorios
     {
         return [
             'title'=> fake()->word(),
             'content'=> fake()->paragraph(3),
             'user_id'=> User::inRandomOrder()->first()->id,   // Obtener un ID de usuario aleatorio de la tabla de usuarios
-            'state_id'=> States::inRandomOrder()->firstOrFail()->id,        // Obtener un ID de estado aleatorio de la tabla de estados
+            'states_id'=> States::inRandomOrder()->firstOrFail()->id,        // Obtener un ID de estado aleatorio de la tabla de estados
         ];
     }
 }

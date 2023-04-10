@@ -30,7 +30,7 @@ class AuthorTransformer extends TransformerAbstract
      *
      * @return array
      */
-    public function transform(Author $author)
+    public function transform(Author $author) //recibe un objeto de tipo author
     {
         return [
             'identificador' => (int) $author->id,
@@ -53,7 +53,7 @@ class AuthorTransformer extends TransformerAbstract
         ];
     }
 
-    public static function originalAttribute($index){
+    public static function originalAttribute($index){ //recibe el nombre de la columna de la base de datos
         $attributes = [
             'identificador' => 'id',
             'nombre'=> 'name',
@@ -66,7 +66,7 @@ class AuthorTransformer extends TransformerAbstract
         return isset($attributes[$index]) ? $attributes[$index] : null;
     }
 
-    public static function transformedAttrigure($index){
+    public static function transformedAttrigure($index){//recibe el nombre de la columna de la base de datos
         $attributes = [
             'id' => 'identificador',
             'name'=> 'nombre',

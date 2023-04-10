@@ -30,7 +30,7 @@ class OwnerTransformer extends TransformerAbstract
      *
      * @return array
      */
-    public function transform(owner $owner)
+    public function transform(owner $owner) //recibe un objeto de tipo owner
     {
         return [
             'identificador' => (int) $owner->id,
@@ -53,7 +53,7 @@ class OwnerTransformer extends TransformerAbstract
         ];
     }
 
-    public static function originalAttribute($index){
+    public static function originalAttribute($index){ //recibe el nombre de la columna de la base de datos
         $attributes = [
             'identificador' => 'id',
             'nombre'=> 'name',

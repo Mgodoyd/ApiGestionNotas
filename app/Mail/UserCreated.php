@@ -15,46 +15,26 @@ class UserCreated extends Mailable
     use Queueable, SerializesModels;
 
     public $user;
-
-    /**
-     * Create a new message instance.
-     */
-    public function __construct(User $user)
+    public function __construct(User $user)//constructor de la clase y se le pasa el usuario
     {
         $this->user = $user;
     }
 
-   /* public function build()
-    {
-        return $this->text('views.emails.welcome')->subject('Por favor confirma tu correo');
-    }*/
-
-    /**
-     * Get the message envelope.
-     */
-    public function envelope(): Envelope
+    public function envelope(): Envelope //metodo para enviar el correo
     {
         return new Envelope(
             subject: 'User Created',
         );
     }
 
-    /**
-     * Get the message content definition.
-     */
-    public function content(): Content
+    public function content(): Content //metodo para enviar el correo
     {
         return new Content(
             text: 'emails.welcome',
         );
     }
 
-    /**
-     * Get the attachments for the message.
-     *
-     * @return array<int, \Illuminate\Mail\Mailables\Attachment>
-     */
-    public function attachments(): array
+    public function attachments(): array //metodo para enviar el correo
     {
         return [];
     }

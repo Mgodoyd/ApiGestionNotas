@@ -10,8 +10,8 @@ class States extends Model
 {
     use HasFactory;
 
-    public $transformer = StateTransformer::class;
-    public function notes()
+    public $transformer = StateTransformer::class;//transformador de la clase
+    public function notes() // "muchos a uno"
     {
         return $this->hasMany(Notes::class, 'states_id');
     }

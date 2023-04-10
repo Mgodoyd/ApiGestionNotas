@@ -6,53 +6,22 @@ use App\Http\Controllers\Controller;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Laravel\Passport\Bridge\User;
 
 class LoginController extends Controller
-{
-    /**
-     * Display a listing of the resource.
-     *//* public function login(Request $request)
-    {
-        $credentials = $request->only('email', 'password', 'rol_id');
-    
-        if (Auth::attempt($credentials)) {
-            $rol_id = $request->input('rol_id');
-            $user = Auth::user();
-            $tokenResult = $user->createToken('Personal Access Token',['manage-notes', 'manage-account', 'manage-rol-state', 'update-notes', 'read-notes']);
-            $token = $tokenResult->token;
-            $token->expires_at = Carbon::now()->addWeeks(1);
-            $token->save();
-           // dd($rol_id);
-          
-
-    
-            return response()->json([
-                'access_token' => $tokenResult->accessToken,
-                'token_type' => 'Bearer',
-                'rol_id' => $rol_id,
-                'expires_at' => Carbon::parse(
-                    $tokenResult->token->expires_at
-                )->toDateTimeString()
-            ]);
-        } else {
-            return response()->json(['error' => 'Unauthorized'], 401);
-        }
-    }
-    */public function login(Request $request)
+{        
+    public function login(Request $request) 
 {
     $credentials = $request->only('email', 'password', 'rol_id');
 
     if (Auth::attempt($credentials)) {
        
-        $user = Auth::user();
+        $user = Auth::user(); //obtenemos el usuario autenticado
         $rol_id = $request->input('rol_id');
-      // var_dump($user);
-        $scopes = [];
+        $scopes = []; //inicializamos el array de scopes vacio
        
         switch ($rol_id) {
             case 1:
-            $scopes = [/*'manage-notes'*/'manage-account', 'manage-rol-state'/*'update-notes'*/,'update','store','destroy']; //owner
+            $scopes = ['manage-account', 'manage-rol-state','update','store','destroy']; //owner
                 break;
             case 2:
                 $scopes = ['update','store','destroy'];//author
@@ -68,12 +37,12 @@ class LoginController extends Controller
                 return response()->json(['error' => 'Invalid role'], 401);
         }
 
-        $tokenResult = $user->createToken('Personal Access Token', $scopes);
+        $tokenResult = $user->createToken('Personal Access Token', $scopes); //creamos el token
         $token = $tokenResult->token;
         $token->expires_at = Carbon::now()->addWeeks(1);
         $token->save();
 
-        return response()->json([
+        return response()->json([ //devolvemos el token
             'access_token' => $tokenResult->accessToken,
             'token_type' => 'Bearer',
             'rol_id' => $rol_id,
@@ -82,8 +51,8 @@ class LoginController extends Controller
             )->toDateTimeString()
         ]);
     } else {
-        return response()->json(['error' => 'Unauthorized'], 401);
-    }
-}
+        return response()->json(['error' => 'No Autorizado'], 401);
+          }
+     }
 
 }

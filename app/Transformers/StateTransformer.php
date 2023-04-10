@@ -30,7 +30,7 @@ class StateTransformer extends TransformerAbstract
      *
      * @return array
      */
-    public function transform(States $state)
+    public function transform(States $state)//recibe un objeto de tipo state
     {
         return [
             'identificador' => (int) $state->id,
@@ -48,7 +48,7 @@ class StateTransformer extends TransformerAbstract
         ];
     }
 
-    public static function originalAttribute($index){
+    public static function originalAttribute($index){//recibe el nombre de la columna de la base de datos
         $attributes = [
             'identificador' => 'id',
             'nombre'=> 'name_status',

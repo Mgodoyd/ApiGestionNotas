@@ -30,7 +30,7 @@ class UserTransformer extends TransformerAbstract
      *
      * @return array
      */
-   public function transform(User $user)
+   public function transform(User $user) //recibe un objeto de tipo user
     {
         return [
             'identificador' => (int) $user->id,
@@ -52,7 +52,7 @@ class UserTransformer extends TransformerAbstract
         ];
     }
 
-    public static function originalAttribute($index){
+    public static function originalAttribute($index){//recibe el nombre de la columna de la base de datos
         $attributes = [
             'identificador' => 'id',
             'nombre'=> 'name',

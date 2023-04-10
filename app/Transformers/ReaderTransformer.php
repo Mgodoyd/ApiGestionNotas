@@ -30,7 +30,7 @@ class ReaderTransformer extends TransformerAbstract
      *
      * @return array
      */
-    public function transform(reader $reader)
+    public function transform(reader $reader) //recibe un objeto de tipo reader
     {
         return [
             'identificador' => (int) $reader->id,
@@ -46,16 +46,12 @@ class ReaderTransformer extends TransformerAbstract
                             'rel' => 'self',
                             'href' => route('readers.show', $reader->id),
                         ],
-                    /* [
-                            'rel' => 'user.notes',
-                            'href' => route('users.notes', $user->id),
-                        ],*/
                     
                 ]
         ];
     }
 
-    public static function originalAttribute($index){
+    public static function originalAttribute($index){//recibe el nombre de la columna de la base de datos
         $attributes = [
             'identificador' => 'id',
             'nombre'=> 'name',

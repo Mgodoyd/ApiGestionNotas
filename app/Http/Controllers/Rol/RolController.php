@@ -3,34 +3,23 @@
 namespace App\Http\Controllers\Rol;
 
 use App\Http\Controllers\Apicontroller;
-use App\Http\Controllers\Controller;
 use App\Models\Rol;
-use Illuminate\Http\Request;
 
 class RolController extends Apicontroller
 {
-     public function __construct()
+     public function __construct() //constructor de la clase y se le pasa el middleware para que solo se pueda acceder a los metodos de esta clase si se esta autenticado
     {
         $this->middleware('client.credentials')->only(['index', 'show']);
         $this->middleware('auth:api')->only(['index', 'show']);
         $this->middleware('scope:manage-rol-state')->only(['index', 'show']);
 
     }
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index()//metodo para mostrar todos los roles
     {
         $rol = Rol::all();
         return $this->showAll($rol);
     }
-
-    
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Rol $rol)
+    public function show(Rol $rol)//metodo para mostrar un rol
     {
         return $this->showOne($rol, 200);
     }

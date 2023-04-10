@@ -30,7 +30,7 @@ class NotesTransformer extends TransformerAbstract
      *
      * @return array
      */
-    public function transform(Notes $note)
+    public function transform(Notes $note) //recibe un objeto de tipo notes
     {
         return [
             'identificador' => (int) $note->id,
@@ -54,7 +54,7 @@ class NotesTransformer extends TransformerAbstract
         ];
     }
 
-    public static function originalAttribute($index){
+    public static function originalAttribute($index){ //recibe el nombre de la columna de la base de datos
         $attributes = [
             'identificador' => 'id',
             'titulo'=> 'title',
@@ -68,7 +68,7 @@ class NotesTransformer extends TransformerAbstract
         return isset($attributes[$index]) ? $attributes[$index] : null;
     }
 
-    public static function transformedAttribute($index){
+    public static function transformedAttribute($index){ //recibe el nombre de la columna de la base de datos
         $attributes = [
             'id' => 'identificador',
             'title'=> 'titulo',

@@ -9,65 +9,18 @@ use Illuminate\Http\Request;
 
 class ReaderNotesController extends Apicontroller
 {
-    public function __construct()
+    public function __construct() //constructor de la clase y se le pasa el middleware para que solo se pueda acceder a los metodos de esta clase si se esta autenticado
     {
         $this->middleware('client.credentials')->only(['index', 'show']);
     }
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index() //metodo para mostrar todas las notas
     {
         $notas = Notes::all();
         return $this->showAll($notas);
     }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $title)
+    public function show(string $title) //metodo para mostrar una nota
     {
           $nota = Notes::where('title', $title)->firstOrFail();
           return $this->showOne($nota, 200);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
     }
 }

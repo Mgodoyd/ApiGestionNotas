@@ -30,7 +30,7 @@ class WriterTransformer extends TransformerAbstract
      *
      * @return array
      */
-    public function transform(writer $writer)
+    public function transform(writer $writer) //recibe un objeto de tipo writer
     {
         return [
             'identificador' => (int) $writer->id,
@@ -54,7 +54,7 @@ class WriterTransformer extends TransformerAbstract
     }
 
 
-    public static function originalAttribute($index){
+    public static function originalAttribute($index){//recibe el nombre de la columna de la base de datos
         $attributes = [
             'identificador' => 'id',
             'nombre'=> 'name',

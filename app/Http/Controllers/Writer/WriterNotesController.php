@@ -3,51 +3,32 @@
 namespace App\Http\Controllers\Writer;
 
 use App\Http\Controllers\Apicontroller;
-use App\Http\Controllers\Controller;
 use App\Models\Notes;
 use Illuminate\Http\Request;
-use App\Transformers\WriterTransformer;
 
 class WriterNotesController extends Apicontroller
 {
-   public function __construct(){
+   public function __construct(){ //constructor de la clase y se le pasa el middleware para que solo se pueda acceder a los metodos de esta clase si se esta autenticado
 
         $this->middleware('client.credentials')->only(['index','show']);  //sirve para que solo el cliente pueda ver las notas
         $this->middleware('auth:api')->except(['index','show']); //sirve para que solo el cliente pueda ver las notas
        // $this->middleware('transform.input' . WriterTransformer::class)->only(['update']);
         $this->middleware('scope:update')->only(['update']);
     }
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function index() //metodo para mostrar todas las notas
     {
         $notas = Notes::all();
         return $this->showAll($notas);
     }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function show(string $title)
-    
+    public function show(string $title) //metodo para mostrar una nota
     {
             $nota = Notes::where('title', $title)->firstOrFail();
             return $this->showOne($nota, 200);
-   }
-    
- 
- 
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $title)
+    }
+    public function update(Request $request, string $title) //metodo para actualizar una nota
         {
             $nota = Notes::where('title', $title)->first();
             
-            
-
             if (!$nota) {
                 return $this->errorResponse('La nota no existe', 404);
             }
@@ -70,7 +51,7 @@ class WriterNotesController extends Apicontroller
                 return $this->showOne($nota, 200);
             } else {
                 return $this->errorResponse('Se debe especificar al menos un valor diferente para actualizar', 422);
-            }
+          }
         
-        }
+     }
 }

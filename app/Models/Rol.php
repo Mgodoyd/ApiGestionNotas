@@ -8,19 +8,18 @@ use App\Transformers\RolTransformer;
 
 class Rol extends Model
 {
-      use HasFactory;
+    use HasFactory;
 
-        public $transformer = RolTransformer::class;
-      public function users()
-      {
-          return $this->belongsToMany(User::class,'rol_user');
-      }
+     public $transformer = RolTransformer::class; //transformador de la clase
+     public function users()//muchos a muchos
+    {
+         return $this->belongsToMany(User::class,'rol_user');
+    }
     
     protected $table = 'rols';
 
 
-
-    public static function allRoles()
+    public static function allRoles() //funcion para obtener todos los roles
     {
         return static::all();
     }
@@ -29,7 +28,7 @@ class Rol extends Model
         'name_role',
     ];
 
-    protected $hidden = [
+    protected $hidden = [ //ocula los campos de la tabla pivote
         'pivot'
     ];
 }

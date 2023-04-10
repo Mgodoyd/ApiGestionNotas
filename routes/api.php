@@ -18,20 +18,16 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-//Owners
-Route::resource('owners', 'App\Http\Controllers\Owner\OwnerController', ['except' => ['create','edit']]);  
+//Owners  
 Route::resource('ownersnotes', 'App\Http\Controllers\Owner\OwnerNotesController', ['except' => ['create','edit']]); 
 
 //Authors
-Route::resource('authors', 'App\Http\Controllers\Author\AuthorController', ['except' => ['create','edit']]); 
 Route::resource('authorsnotes', 'App\Http\Controllers\Author\AuthorNotesController', ['except' => ['create','edit']]);
 
 //Readers
-Route::resource('readers', 'App\Http\Controllers\Reader\ReaderController', ['only' => ['index','show']]);  
 Route::resource('readersnotes', 'App\Http\Controllers\Reader\ReaderNotesController', ['only' => ['index','show']]); 
 
-//Writers
-Route::resource('writers', 'App\Http\Controllers\Writer\WriterController', ['except' => ['create','destroy','store']]);  
+//Writers 
 Route::resource('writersnotes', 'App\Http\Controllers\Writer\WriterNotesController', ['except' => ['create','destroy','store']]);  
 
 //Notes

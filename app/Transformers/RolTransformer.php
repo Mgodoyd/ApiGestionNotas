@@ -30,7 +30,7 @@ class RolTransformer extends TransformerAbstract
      *
      * @return array
      */
-    public function transform(Rol $rol)
+    public function transform(Rol $rol) //recibe un objeto de tipo rol
     {
         return [
             'identificador' => (int) $rol->id,
@@ -52,7 +52,7 @@ class RolTransformer extends TransformerAbstract
     ];
     }
 
-    public static function originalAttribute($index){
+    public static function originalAttribute($index){//recibe el nombre de la columna de la base de datos
         $attributes = [
             'identificador' => 'id',
             'nombre'=> 'name_role',

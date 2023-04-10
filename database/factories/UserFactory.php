@@ -14,16 +14,8 @@ use Illuminate\Support\Str;
  */
 class UserFactory extends Factory
 {
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
-    //factory user
     public function definition(): array
     {
-       // $rolId = Rol::pluck('name_role')->random(); // Obtener un ID de rol aleatorio de la tabla de roles
-
         return [
             'name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),

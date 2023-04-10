@@ -8,3 +8,6 @@ Relaciones de las Tablas:
 
 
 ### Video del Funcionamiento del api
+
+[Video :) ](https://youtu.be/ejhVSdfD4Ls)
+

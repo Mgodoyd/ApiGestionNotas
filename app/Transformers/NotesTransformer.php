@@ -50,6 +50,10 @@ class NotesTransformer extends TransformerAbstract
                     'rel' => 'notes.states',
                     'href' => route('notes.states.index', $note->states_id),
                 ],
+                [
+                    'rel' => 'notes.users',
+                    'href' => route('notes.users.index',$note->user_id),
+                ],
             ]
         ];
     }

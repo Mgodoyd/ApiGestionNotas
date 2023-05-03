@@ -21,7 +21,7 @@ class Notes extends Model
      ];
 
     public function user(){ 
-        return $this->belongsTo(User::class); // "muchos a uno" 
+        return $this->belongsTo(User::class, 'user_id'); // "muchos a uno" 
     }
   
     public function states() // "muchos a uno"
@@ -29,3 +29,4 @@ class Notes extends Model
         return $this->belongsTo(States::class, 'states_id');
     }
 }
+

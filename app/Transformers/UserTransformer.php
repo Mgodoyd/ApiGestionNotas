@@ -37,9 +37,11 @@ class UserTransformer extends TransformerAbstract
             'nombre'=> (string) $user->name,
             'correo' => (string) $user->email,
             'es_verificado' => (int) $user->is_verificado,
+             'rol' => (string) $user->rol_id,
+             'token' => (string) $user->verification_token,
             'fecha_creacion' => (string) $user->created_at,
             'fecha_actualizacion' => (string) $user->updated_at,
-          
+             
              'links' => [
                  
                     [

@@ -11,7 +11,7 @@ class RolUserController extends Apicontroller
     {
         $this->middleware('client.credentials')->only(['index']);
         $this->middleware('auth:api')->only(['index']);
-        $this->middleware('scope:manage-rol-state')->only(['index']);
+        $this->middleware('scope:manage-rol-user')->only(['index']);
 
     }
     public function index($id) //metodo para mostrar todos los usuarios de un rol

@@ -41,6 +41,7 @@ class AuthServiceProvider extends ServiceProvider
 
        Passport::tokensCan([ //permisos que se pueden dar a los usuarios
             'manage-rol-state' => 'ver los roles y estados disponibles',
+            'manage-rol-user' => 'obtener los usuarios por rol',
             'manage-account' => 'Obtener la informacion de la cuenta, nombre, email, estado (sin contraseña), modificar datos como email, nombre y contraseña.',
             'update' => 'actualizar notas',
             'store' => 'crear notas',

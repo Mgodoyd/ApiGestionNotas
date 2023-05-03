@@ -5,6 +5,7 @@
 /public/storage
 /storage/*.key
 /vendor
+/Documentación/2023-04-10 10-09-05.mp4
 .env
 .env.backup
 .env.production

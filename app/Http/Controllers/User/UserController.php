@@ -13,8 +13,8 @@ class UserController extends ApiController
     public function __construct()//constructor de la clase y se le pasa el middleware para que solo se pueda acceder a los metodos de esta clase si se esta autenticado
     {
        // $this->middleware('client.credentials')->only(['index', 'show']);
-        $this->middleware('auth:api')->except(['verify']);
-        $this->middleware('scope:manage-account')->only(['index', 'show','store', 'update', 'destroy']);
+        $this->middleware('auth:api')->except(['verify','store']);
+        $this->middleware('scope:manage-account')->only(['index', 'show', 'update', 'destroy']);
     } 
     public function index()//metodo para mostrar todos los usuarios
     {
@@ -33,8 +33,10 @@ class UserController extends ApiController
         $campos['password'] = bcrypt($request->password);
         $campos['verified'] = User::NO_VERIFICADO;
         $campos['verification_token'] = User::generateVerificationToken();
+        $campos['rol_id'] = 4;
      
         $usuario = User::create($campos);
+        $usuario->roles()->attach($campos['rol_id']); // Insertar el rol en la tabla pivote
         return $this->showOne($usuario, 201);
     }
     public function show(User $user) //metodo para mostrar un usuario
@@ -43,11 +45,11 @@ class UserController extends ApiController
     }
     public function update(Request $request, User $user) //metodo para actualizar un usuario
     {
-        $usuarioExistente = User::where('email', $request->input('email'))->exists();
+      /*  $usuarioExistente = User::where('email', $request->input('email'))->exists();
     
        if ($usuarioExistente) {
            return $this->errorResponse('Ya existe un usuario con el mismo Email', 400);
-       }
+       }*/
       
          $request->validate([
           'email' => 'email',
@@ -72,11 +74,23 @@ class UserController extends ApiController
             $user->password = bcrypt($request->password);   //se actualiza el password
         }
 
-        if ($request->has('rol_id')) { //si el request tiene el campo role
+       /* if ($request->has('rol_id')) { //si el request tiene el campo role
            if(!$user->isVerificado()){ //si el usuario no esta verificado
              return $this->errorResponse('Unicamente los usuarios verificados pueden cambiar su rol', 409);
            }
            $user->rol_id = $request->rol_id; //se actualiza el rol
+        }
+        if ($request->has('rol_id')) {
+            $user->roles()->sync([$request->rol_id]);
+        }*/
+        if ($request->has('rol_id')) {
+            if(!$user->isVerificado()){ //si el usuario no está verificado
+                return $this->errorResponse('Unicamente los usuarios verificados pueden cambiar su rol', 409);
+            }
+           
+            $user->rol_id = $request->rol_id; //se actualiza el rol
+            $roles = [$request->rol_id]; //se crea un array con el id del rol
+            $user->roles()->sync($roles); //se sincroniza el rol
         }
         
         if ($user->isDirty()) {

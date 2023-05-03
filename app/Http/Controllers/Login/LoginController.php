@@ -16,15 +16,16 @@ class LoginController extends Controller
     if (Auth::attempt($credentials)) {
        
         $user = Auth::user(); //obtenemos el usuario autenticado
-        $rol_id = $request->input('rol_id');
+        $rol_id = $user->rol_id;
+        $id = $user->id;
         $scopes = []; //inicializamos el array de scopes vacio
        
         switch ($rol_id) {
             case 1:
-            $scopes = ['manage-account', 'manage-rol-state','update','store','destroy']; //owner
+            $scopes = ['manage-account','manage-rol-user', 'manage-rol-state','update','store','destroy']; //owner
                 break;
             case 2:
-                $scopes = ['update','store','destroy'];//author
+                $scopes = ['manage-rol-user','update','store','destroy'];//author
                 break;
             case 3:
                 $scopes = ['update'];//writer
@@ -42,14 +43,15 @@ class LoginController extends Controller
         $token->expires_at = Carbon::now()->addWeeks(1);
         $token->save();
 
-        return response()->json([ //devolvemos el token
+        return response()->json([
             'access_token' => $tokenResult->accessToken,
             'token_type' => 'Bearer',
+            'id' => $id,
             'rol_id' => $rol_id,
             'expires_at' => Carbon::parse(
                 $tokenResult->token->expires_at
             )->toDateTimeString()
-        ]);
+        ])->header('Authorization', 'Bearer ' . $tokenResult->accessToken);        
     } else {
         return response()->json(['error' => 'No Autorizado'], 401);
           }

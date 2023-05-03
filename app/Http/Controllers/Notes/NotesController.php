@@ -23,6 +23,7 @@ class NotesController extends Apicontroller
     public function index() //metodo para mostrar todas las notas
     {
          $notes = Notes::all();
+         
          return $this->showAll($notes);
     }
     public function store(Request $request) //metodo para crear una nota
@@ -30,7 +31,6 @@ class NotesController extends Apicontroller
         
         $request->validate([
             'title' => 'required|unique:notes,title',
-            'content' => 'required|max:255',
             'user_id' => 'required',
         ]);
         
@@ -45,18 +45,19 @@ class NotesController extends Apicontroller
         $nota = Notes::create($campos);
         return $this->showOne($nota, 201);
     }
-    public function show(string $id) //metodo para mostrar una nota
+    public function show(string $title)
     {
-        $nota = Notes::findOrFail($id);
+        $nota = Notes::where('title', $title)->firstOrFail();
         return $this->showOne($nota, 200);
     }
+    
     public function update(Request $request,string $id) //metodo para actualizar una nota
     {
         $notes = Notes::where('id', $id)->first();
 
         $request->validate([
             'title' => 'string|max:255',
-            'content' => 'string',
+            //'content' => 'string',
             'states_id' => 'integer|exists:states,id',
         ]);
 
@@ -94,4 +95,6 @@ class NotesController extends Apicontroller
     
         return $this->showOne($notes, 200);
     }
+
+    
 }

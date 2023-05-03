@@ -28,7 +28,8 @@ class User extends Authenticatable
         'password',
         'rol_id',
         'is_verificado',
-       
+        'verification_token',
+        'rol_id',
        'verification_token',
 
     ];
@@ -78,5 +79,12 @@ class User extends Authenticatable
    {
     return $this->belongsToMany(Rol::class, 'rol_user'); //estoy accesando a la tabla rol_user que es la que relaciona los roles con los usuarios
    } 
+  
+   public function notes()
+{
+    return $this->hasMany(Notes::class); 
+}
+
 
 }
+

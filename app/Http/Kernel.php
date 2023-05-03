@@ -15,6 +15,7 @@ class Kernel extends HttpKernel
      */
     protected $middleware = [
         // \App\Http\Middleware\TrustHosts::class,
+        \App\Http\Middleware\RemoveCorsHeaderFromLogin::class,
         \App\Http\Middleware\TrustProxies::class,
         \Illuminate\Http\Middleware\HandleCors::class,
         \App\Http\Middleware\PreventRequestsDuringMaintenance::class,
@@ -71,5 +72,6 @@ class Kernel extends HttpKernel
         'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
         'signature' => \App\Http\Middleware\SignatureMiddleware::class,
         'transform.input'=> \App\Http\Middleware\TransformInput::class,
+        'cors' => \Illuminate\Http\Middleware\HandleCors::class,
     ];
 }
